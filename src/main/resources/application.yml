@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: bgs-backend
+  datasource:
+    driver-class-name: org.postgresql.Driver

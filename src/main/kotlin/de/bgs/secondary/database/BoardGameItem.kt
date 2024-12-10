@@ -7,22 +7,22 @@ import jakarta.persistence.ManyToMany
 @Entity
 class BoardGameItem {
     @Id
-    private var bggId: Long? = null
+    private var bggId: Long = 0
 
     private var name: String? = null
     private var year: Int? = null
 
-    @ManyToMany
-    private var gameType: Set<GameType>? = null
-
-    @ManyToMany
-    private var designer: Set<GamePerson>? = null
-
-    @ManyToMany
-    private var artist: Set<GamePerson>? = null
-
-    @ManyToMany
-    private var publisher: Set<GamePublisher>? = null
+//    @ManyToMany
+//    private var gameType: MutableSet<GameType>?
+//
+//    @ManyToMany
+//    private var designer: MutableSet<GamePerson>? = null
+//
+//    @ManyToMany
+//    private var artist: MutableSet<GamePerson>? = null
+//
+//    @ManyToMany
+//    private var publisher: MutableSet<GamePublisher>? = null
 
     private var minPlayers: Int? = null
     private var maxPlayers: Int? = null
@@ -35,18 +35,18 @@ class BoardGameItem {
     private var minTime: Int? = null
     private var maxTime: Int? = null
 
-    @ManyToMany
-    private var category: Set<GameCategory>? = null
-
-    @ManyToMany
-    private var mechanic: Set<GameMechanic>? = null
+//    @ManyToMany
+//    private var category: MutableSet<GameCategory>? = null
+//
+//    @ManyToMany
+//    private var mechanic: MutableSet<GameMechanic>? = null
 
     private var cooperative = false
     private var compilation = false
     private var compilationOf: String? = null //ref what TODO with this? Link to bggId?
 
-    @ManyToMany
-    private var family: Set<GameFamily>? = null
+    @ManyToMany(mappedBy = "boardGame")
+    private var family: MutableSet<GameFamily>? = null
 
     private var implementation: String? = null //ref
     private var integration: String? = null //ref

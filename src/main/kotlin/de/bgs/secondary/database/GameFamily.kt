@@ -7,9 +7,9 @@ import jakarta.persistence.ManyToMany
 @Entity
 class GameFamily {
     @Id
-    var id: Long? = null
-    var name: String? = null
+    var id: Long = 0
+    var name: String = ""
 
-    @ManyToMany()
-    var boardGame: Set<BoardGameItem>? = null
+    @ManyToMany
+    var boardGame: MutableSet<BoardGameItem> = mutableSetOf()
 }
