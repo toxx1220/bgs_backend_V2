@@ -9,21 +9,21 @@ import java.math.BigDecimal
 @Entity
 class GameFamily (
     @Id
-    @Column(nullable = false)
-    val id: BigDecimal,
-    var name: String = ""
+    val id: Long,
+    var name: String
 ) {
     @ManyToMany
     var boardGame: MutableSet<BoardGameItem> = mutableSetOf()
 }
 
-//class GameFamily {
-//    @Id
-//    @Column(nullable = false)
-//    val id: BigDecimal,
-//    var name: String = ""
-//
-//    @ManyToMany
-//    var boardGame: MutableSet<BoardGameItem> = mutableSetOf()
-//
-//}
+/*
+class GameFamily {
+    @Id
+    @Column(nullable = false)
+    val id: BigDecimal,
+    var name: String = ""
+
+    @ManyToMany
+    var boardGame: MutableSet<BoardGameItem> = mutableSetOf()
+
+}*/
