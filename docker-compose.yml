@@ -6,8 +6,7 @@ services:
       context: ./
     restart: always
     environment:
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: 'org.postgresql.Driver'
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}'
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: '${PG_USER}'
       SPRING_DATASOURCE_PASSWORD: '${PG_PASSWORD}'
       GIT_TOKEN: '${GIT_TOKEN}'
