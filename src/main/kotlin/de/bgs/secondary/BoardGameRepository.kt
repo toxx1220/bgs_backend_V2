@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-public interface BoardGameRepository : CrudRepository<BoardGameItem, Long> {
+interface BoardGameRepository : CrudRepository<BoardGameItem, Long> {
 }

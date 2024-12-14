@@ -5,7 +5,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.ManyToMany
 
 @Entity
-class BoardGameItem (
+class BoardGameItem(
     @Id
     var bggId: Long? = null,
 
