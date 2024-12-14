@@ -20,3 +20,7 @@ How to run the App:
 
 Endpoints:
 http://localhost:8080/swagger-ui/index.html
+
+Connection to the Database outside of the Docker Container (using example env file data):
+`jdbc:postgresql://localhost:5432/bgs`
+Connecting from inside the Docker, host needs to be swapped to `${PG_HOST}`
