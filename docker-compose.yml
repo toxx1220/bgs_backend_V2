@@ -4,6 +4,7 @@ services:
     container_name: ${APP_NAME}
     build:
       context: ./
+      dockerfile: Dockerfile_build
     restart: always
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}

@@ -1,0 +1,15 @@
+ARG GRADLE_DIR=/home/gradle/src
+# Build Stage
+FROM gradle:jdk21-alpine AS build
+ARG GRADLE_DIR
+WORKDIR $GRADLE_DIR
+COPY --chown=gradle:gradle . $GRADLE_DIR
+RUN gradle build --no-daemon --exclude-task test
+
+# Run Stage
+FROM eclipse-temurin:21-alpine
+ARG GRADLE_DIR
+RUN addgroup --system spring && adduser --system --ingroup spring spring
+USER spring:spring
+COPY --from=build $GRADLE_DIR/build/libs/*.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
