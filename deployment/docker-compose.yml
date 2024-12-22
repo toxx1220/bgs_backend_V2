@@ -24,6 +24,7 @@ services:
   postgres:
     image: postgres:latest
     container_name: ${PG_HOST}
+    restart: always
     environment:
       POSTGRES_DB: '${PG_DATABASE}'
       POSTGRES_USER: '${PG_USER}'
@@ -39,6 +40,20 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
+
+  reverse-proxy:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - bgs-backend
+      - postgres
+    volumes:
+    - ./nginx-conf:/etc/nginx/nginx.conf
+    networks:
+      - tasks-network
 
 networks:
   tasks-network:

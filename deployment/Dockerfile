@@ -1,6 +1,7 @@
 FROM openjdk:21-jdk-slim
 RUN addgroup --system spring && adduser --system --ingroup spring spring
 USER spring:spring
-ARG JAR_FILE=~/bgs/bgs*.jar
+WORKDIR /bgs
+ARG JAR_FILE=app.jar
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/bgs/app.jar"]
