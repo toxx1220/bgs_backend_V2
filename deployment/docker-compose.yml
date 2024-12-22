@@ -8,9 +8,9 @@ services:
     restart: always
     labels:
       - "traefik.enabled=true"
-      - "traefik.http.routers.bgs-backend.rule=Host(`bgsearch.duckdns.org`)"
-      - "traefik.http.routers.bgs-backend.entrypoints=websecure"
-      - "traefik.http.routers.bgs-backend.tls.certresolver=myresolver"
+      - "traefik.http.routers.${APP_NAME}.rule=Host(`${DNS_NAME}`)"
+      - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: '${PG_USER}'
@@ -49,7 +49,7 @@ services:
     command:
       - "--api.insecure=true" # Dashboard
       - "--providers.docker"
-      - "--providers.docker.exposebydefault=false"
+      - "--providers.docker.exposedbydefault=false"
       # configure https
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
@@ -63,6 +63,8 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080" # Port for Dashboard. TODO: remove, debug only
+    depends_on:
+      - bgs-backend
     volumes:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock # Enable Traefik docker listening
