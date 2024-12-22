@@ -6,15 +6,18 @@ services:
       context: ./
       dockerfile: Dockerfile
     restart: always
+    labels:
+      - "traefik.enabled=true"
+      - "traefik.http.routers.bgs-backend.rule=Host(`bgsearch.duckdns.org`)"
+      - "traefik.http.routers.bgs-backend.entrypoints=websecure"
+      - "traefik.http.routers.bgs-backend.tls.certresolver=myresolver"
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: '${PG_USER}'
       SPRING_DATASOURCE_PASSWORD: '${PG_PASSWORD}'
       GIT_TOKEN: '${GIT_TOKEN}'
-    expose:
-      - '${APP_PORT}'
     ports:
-      - '${APP_PORT}:${APP_PORT}'
+      - '${APP_PORT}'
     networks:
       - tasks-network
     depends_on:
@@ -32,9 +35,9 @@ services:
     networks:
       - tasks-network
     volumes:
-      - ./volumes/postgres:/data/db
+      - db-data:/var/lib/postgres/data
     ports:
-      - '${PG_PORT}:${PG_PORT}' # TODO: only for debug
+      - '${PG_PORT}'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0"]
       interval: 5s
@@ -42,19 +45,33 @@ services:
       retries: 5
 
   reverse-proxy:
-    image: nginx:latest
-    restart: always
+    image: traefik:latest
+    command:
+      - "--api.insecure=true" # Dashboard
+      - "--providers.docker"
+      - "--providers.docker.exposebydefault=false"
+      # configure https
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=${TRAEFIK_TLS_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      # Redirecting http Requests to https
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - bgs-backend
-      - postgres
+      - "8080:8080" # Port for Dashboard. TODO: remove, debug only
     volumes:
-    - ./nginx-conf:/etc/nginx/nginx.conf
+      - letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock # Enable Traefik docker listening
     networks:
       - tasks-network
 
 networks:
   tasks-network:
     driver: bridge
+volumes:
+  db-data:
+  letsencrypt:

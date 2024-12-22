@@ -1,3 +1,4 @@
+# optional conf
 events {
   worker_connections 1024;
 }
