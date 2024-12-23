@@ -1,5 +1,5 @@
 services:
-  bgsearch:
+  bgs-backend:
     image: ${APP_NAME}:latest
     container_name: ${APP_NAME}
     build:
