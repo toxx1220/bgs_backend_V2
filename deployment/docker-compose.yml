@@ -1,5 +1,5 @@
 services:
-  bgs-backend:
+  bgsearch:
     image: ${APP_NAME}:latest
     container_name: ${APP_NAME}
     build:
@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     labels:
-      - "traefik.enabled=true"
+      - "traefik.enable=true"
       - "traefik.http.routers.${APP_NAME}.rule=Host(`${DNS_NAME}`)"
       - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
@@ -51,9 +51,9 @@ services:
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       # configure https
-      - "--entrypoints.websecure.address=:443"
+      - "--entryPoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=${TRAEFIK_TLS_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.email=mail@${DNS_NAME}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       # Redirecting http Requests to https
       - "--entrypoints.web.address=:80"
@@ -64,7 +64,7 @@ services:
       - "443:443"
       - "8080:8080" # Port for Dashboard. TODO: remove, debug only
     depends_on:
-      - bgs-backend
+      - ${APP_NAME}
     volumes:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock # Enable Traefik docker listening
