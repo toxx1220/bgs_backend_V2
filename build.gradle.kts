@@ -4,6 +4,8 @@ plugins {
 	id("org.springframework.boot") version "3.4.0"
 	id("io.spring.dependency-management") version "1.1.6"
 	kotlin("plugin.jpa") version "1.9.25"
+	kotlin("kapt") version "1.9.25"
+	idea
 }
 
 group = "de"
@@ -28,11 +30,11 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-data-rest")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+	implementation("org.hibernate:hibernate-jpamodelgen:6.6.4.Final")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	runtimeOnly("org.postgresql:postgresql")
@@ -40,7 +42,10 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	kapt("org.hibernate:hibernate-jpamodelgen:6.6.4.Final")
 }
+
+val kaptPath = "${layout.buildDirectory}/generated/source/kaptKotlin/main"
 
 kotlin {
 	compilerOptions {
@@ -56,4 +61,15 @@ allOpen {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+
+sourceSets.main{
+	kotlin.srcDir(kaptPath)
+}
+
+kapt {
+	arguments {
+		arg("kapt.kotlin.generated", kaptPath)
+	}
 }
