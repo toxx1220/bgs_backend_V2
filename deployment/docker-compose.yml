@@ -62,7 +62,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080" # Port for Dashboard. TODO: remove, debug only
     depends_on:
       - ${APP_NAME}
     volumes:
