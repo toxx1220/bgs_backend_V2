@@ -1,13 +1,20 @@
 package de.bgs.secondary.database
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToMany
+import org.hibernate.Hibernate
 
 @Entity
 class BoardGameItem(
     @Id
-    var bggId: Long? = null,
+    @GeneratedValue
+    var technicalId: Long? = null,
+
+    @Column(unique = true)
+    var bggId: Long,
 
     var name: String,
     var year: Int,
@@ -57,4 +64,14 @@ class BoardGameItem(
     var bayesRating: Double,
     var complexity: Double,
     var languageDependency: Double
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        other as GameFamily
+
+        return technicalId == other.technicalId
+    }
+
+    override fun hashCode(): Int = javaClass.hashCode()
+}
