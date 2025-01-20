@@ -34,7 +34,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.3")
-	implementation("org.hibernate:hibernate-jpamodelgen:6.6.4.Final")
+	implementation("org.hibernate:hibernate-jpamodelgen:6.6.5.Final")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	runtimeOnly("org.postgresql:postgresql")
@@ -42,7 +42,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	kapt("org.hibernate:hibernate-jpamodelgen:6.6.4.Final")
+	kapt("org.hibernate:hibernate-jpamodelgen:6.6.5.Final")
 }
 
 val kaptPath = "${layout.buildDirectory}/generated/source/kaptKotlin/main"
