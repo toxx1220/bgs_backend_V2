@@ -33,7 +33,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.3")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")
 	implementation("org.hibernate:hibernate-jpamodelgen:6.6.5.Final")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
