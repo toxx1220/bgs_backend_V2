@@ -14,13 +14,13 @@ class UpdateService(private val gitService: GitService, private val boardGameSer
         // get git repo
         gitService.getGitRepository()
         // parse CSVs and update database
-        val parsedItems:List<BoardGameItem> = parseCsv()
+        val parsedItems: List<BoardGameItem> = parseCsv()
         boardGameService.saveBoardGames(parsedItems)
         return "TODO: Implement me!"
     }
 
     fun parseCsv(): List<BoardGameItem> {
-        return listOf(BoardGameItem(
+        val bgItem = BoardGameItem(
             bggId = 0,
             name = "test-parse",
             year = 0,
@@ -37,7 +37,6 @@ class UpdateService(private val gitService: GitService, private val boardGameSer
             cooperative = false,
             compilation = false,
             compilationOf = "",
-            family = mutableSetOf(GameFamily(0, 0,"test-family")),
             implementation = "",
             integration = "",
             rank = 0,
@@ -47,6 +46,16 @@ class UpdateService(private val gitService: GitService, private val boardGameSer
             bayesRating = 0.0,
             complexity = 0.0,
             languageDependency = 0.0
-        ))
+        )
+        bgItem.setGameFamily(
+            mutableSetOf(
+                GameFamily(
+                    gameFamilyId = 0,
+                    name = "test-family",
+                    boardGame = mutableSetOf(bgItem)
+                )
+            )
+        )
+        return listOf(bgItem)
     }
 }

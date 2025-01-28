@@ -1,10 +1,7 @@
 package de.bgs.secondary.database
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToMany
+import com.fasterxml.jackson.annotation.JsonManagedReference
+import jakarta.persistence.*
 import org.hibernate.Hibernate
 
 @Entity
@@ -52,8 +49,9 @@ class BoardGameItem(
     var compilation: Boolean,
     var compilationOf: String, //ref what TODO with this? Link to bggId?
 
-    @ManyToMany(mappedBy = "boardGame")
-    var family: MutableSet<GameFamily>,
+    @ManyToMany(mappedBy = "boardGame", cascade = [CascadeType.PERSIST])
+    @JsonManagedReference // either this and/or jsonbackreference prevents exception, https://medium.com/@robindamisi/resolved-springframework-http-converter-httpmessagenotwritableexception-could-not-write-json-45e675dedd35
+    var family: MutableSet<GameFamily>? = mutableSetOf(),
 
     var implementation: String, //ref
     var integration: String, //ref
@@ -65,6 +63,11 @@ class BoardGameItem(
     var complexity: Double,
     var languageDependency: Double
 ) {
+    fun setGameFamily(gameFamily: MutableSet<GameFamily>) {
+        this.family = gameFamily
+        gameFamily.forEach { it.addBoardGames(mutableSetOf(this)) }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false

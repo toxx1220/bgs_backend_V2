@@ -1,12 +1,8 @@
 package de.bgs.secondary.database
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToMany
+import com.fasterxml.jackson.annotation.JsonBackReference
+import jakarta.persistence.*
 import org.hibernate.Hibernate
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 
 @Entity
 class GameFamily(
@@ -20,8 +16,13 @@ class GameFamily(
     var name: String,
 
     @ManyToMany
+    @JsonBackReference
     var boardGame: MutableSet<BoardGameItem> = mutableSetOf()
 ) {
+    fun addBoardGames(boardGameItem: MutableSet<BoardGameItem>) {
+        boardGame.addAll(boardGameItem)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
