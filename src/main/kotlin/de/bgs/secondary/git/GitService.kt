@@ -1,4 +1,4 @@
-package de.bgs.core
+package de.bgs.secondary.git
 
 import de.bgs.core.UpdateService.Companion.REPO_URL_FORMAT_STRING
 import org.eclipse.jgit.api.Git
@@ -17,13 +17,12 @@ class GitService(@Value("\${GIT_TOKEN}") private val gitToken: String) {
     private val cloneUrl = MessageFormat.format(REPO_URL_FORMAT_STRING, gitToken)
 
     fun cloneGitRepository(filePath: File): Optional<Repository> {
-        val cp = UsernamePasswordCredentialsProvider(gitToken, "")
 
         try {
             Git.cloneRepository()
                 .setURI(cloneUrl)
                 .setDirectory(filePath)
-                .setCredentialsProvider(cp)
+                .setCredentialsProvider(UsernamePasswordCredentialsProvider(gitToken, ""))
                 .call().use { git ->
                     return Optional.ofNullable(git.repository)
                 }
