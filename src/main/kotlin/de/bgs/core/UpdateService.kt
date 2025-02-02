@@ -2,17 +2,29 @@ package de.bgs.core
 
 import de.bgs.secondary.database.BoardGameItem
 import de.bgs.secondary.database.GameFamily
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.io.File
+import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
+import kotlin.io.path.absolutePathString
 
 @Service
 class UpdateService(private val gitService: GitService, private val boardGameService: BoardGameService) {
+    companion object {
+        const val REPO_URL_FORMAT_STRING: String = "https://oauth2:{0}@framagit.org/r.g/board-game-data"
+        private val REPO_ROOT = Paths.get("")
+    }
+    private val log = KotlinLogging.logger() {}
 
     @Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 7)
     fun updateDatabase(): String {
         // get git repo
-        gitService.getGitRepository()
+        val repo = gitService.cloneGitRepository(File(REPO_ROOT.absolutePathString()))
+        repo.isEmpty.let {
+            log.error { "Cloning git Repo failed!" }
+        }
         // parse CSVs and update database
         val parsedItems: List<BoardGameItem> = parseCsv()
         boardGameService.saveBoardGames(parsedItems)
