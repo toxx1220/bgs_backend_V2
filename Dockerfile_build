@@ -10,6 +10,8 @@ RUN gradle build --no-daemon --exclude-task test
 FROM eclipse-temurin:21-alpine
 ARG GRADLE_DIR
 RUN addgroup --system spring && adduser --system --ingroup spring spring
+WORKDIR /app
+RUN chown spring:spring /app
 USER spring:spring
-COPY --from=build $GRADLE_DIR/build/libs/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY --from=build --chown=spring:spring $GRADLE_DIR/build/libs/*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]

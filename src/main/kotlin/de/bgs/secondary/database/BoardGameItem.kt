@@ -35,7 +35,7 @@ class BoardGameItem(
     var minPlayersBest: Int,
     var maxPlayersBest: Int,
     var minAge: Int,
-    var minAgeRec: Int,
+    var minAgeRec: Int?,
     var minTime: Int,
     var maxTime: Int,
 
@@ -47,14 +47,14 @@ class BoardGameItem(
 
     var cooperative: Boolean,
     var compilation: Boolean,
-    var compilationOf: String, //ref what TODO with this? Link to bggId?
+//    var compilationOf: String, //ref what TODO with this? Link to bggId?
 
-    @ManyToMany(mappedBy = "boardGame", cascade = [CascadeType.PERSIST])
-    @JsonManagedReference // either this and/or jsonbackreference prevents exception, https://medium.com/@robindamisi/resolved-springframework-http-converter-httpmessagenotwritableexception-could-not-write-json-45e675dedd35
+    @ManyToMany(cascade = [CascadeType.PERSIST])
+    @JsonManagedReference
     var family: MutableSet<GameFamily>? = mutableSetOf(),
 
-    var implementation: String, //ref
-    var integration: String, //ref
+//    var implementation: String, //ref
+//    var integration: String, //ref
     var rank: Int,
     var numVotes: Int,
     var avgRating: Double,
@@ -65,7 +65,6 @@ class BoardGameItem(
 ) {
     fun setGameFamily(gameFamily: MutableSet<GameFamily>) {
         this.family = gameFamily
-        gameFamily.forEach { it.addBoardGames(mutableSetOf(this)) }
     }
 
     override fun equals(other: Any?): Boolean {

@@ -1,7 +1,9 @@
 package de.bgs.secondary.database
 
-import com.fasterxml.jackson.annotation.JsonBackReference
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
 import org.hibernate.Hibernate
 
 @Entity
@@ -15,14 +17,7 @@ class GameFamily(
 
     var name: String,
 
-    @ManyToMany
-    @JsonBackReference
-    var boardGame: MutableSet<BoardGameItem> = mutableSetOf()
-) {
-    fun addBoardGames(boardGameItem: MutableSet<BoardGameItem>) {
-        boardGame.addAll(boardGameItem)
-    }
-
+    ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
@@ -33,14 +28,3 @@ class GameFamily(
 
     override fun hashCode(): Int = javaClass.hashCode()
 }
-/*
-class GameFamily {
-    @Id
-    @Column(nullable = false)
-    val id: BigDecimal,
-    var name: String = ""
-
-    @ManyToMany
-    var boardGame: MutableSet<BoardGameItem> = mutableSetOf()
-
-}*/

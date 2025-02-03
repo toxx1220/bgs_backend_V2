@@ -8,6 +8,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.File
+import java.io.IOException
 import java.text.MessageFormat
 import java.util.*
 
@@ -17,6 +18,7 @@ class GitService(@Value("\${GIT_TOKEN}") private val gitToken: String) {
     private val cloneUrl = MessageFormat.format(REPO_URL_FORMAT_STRING, gitToken)
 
     fun cloneGitRepository(filePath: File): Optional<Repository> {
+        if (!filePath.exists()) if (!filePath.mkdirs()) throw IOException("Could not create directory: $filePath")
 
         try {
             Git.cloneRepository()
