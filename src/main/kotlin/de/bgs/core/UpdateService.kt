@@ -22,7 +22,7 @@ class UpdateService(
     private val gameFamilyJpaRepo: GameFamilyJpaRepo
 ) {
     companion object {
-        const val REPO_URL_FORMAT_STRING: String = "https://oauth2:{0}@framagit.org/r.g/board-game-data"
+        const val REPO_URL: String = "https://framagit.org/r.g/board-game-data.git"
         val PROJECT_ROOT: Path = Path(System.getProperty("user.dir"))
         val DATA_DIRECTORY: File = File(PROJECT_ROOT.toFile(), "data")
     }
