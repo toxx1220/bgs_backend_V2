@@ -36,7 +36,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")
     implementation("org.hibernate:hibernate-jpamodelgen:6.6.6.Final")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.1.0.202411261347-r")
-    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.4")
     implementation("org.apache.commons:commons-csv:1.13.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
