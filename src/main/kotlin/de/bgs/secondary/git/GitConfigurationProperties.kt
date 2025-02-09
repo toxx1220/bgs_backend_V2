@@ -4,9 +4,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "git")
 data class GitConfigurationProperties(
-    val repoUrl: String = "",
-    val repoFolder: String = "",
-    val gitToken: String = "",
-    val boardGameCsvFileName: String = "",
-    val gameFamilyCsvFileName: String = "",
+    var repoUrl: String = "",
+    var repoFolder: String = "",
+    var gitToken: String = "",
+    var boardGameCsvFileName: String = "",
+    var gameFamilyCsvFileName: String = "",
 )
