@@ -1,27 +1,27 @@
 package de.bgs.secondary.git
 
-import de.bgs.core.UpdateService.Companion.PROJECT_ROOT
 import de.bgs.secondary.GameFamilyJpaRepo
 import de.bgs.secondary.database.BoardGameItem
 import de.bgs.secondary.database.GameFamily
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.commons.csv.CSVFormat
 import org.springframework.stereotype.Service
-import kotlin.io.path.reader
+import java.io.File
 
 @Service
-class CsvService(private val gameFamilyJpaRepo: GameFamilyJpaRepo) {
-    companion object {
-        private const val CSV_FOLDER = "scraped"
-        const val GAME_FAMILY_CSV_PATH = CSV_FOLDER + "bgg_GameFamily.csv"
-        const val BOARD_GAME_ITEM_CSV_PATH = CSV_FOLDER + "bgg_GameItem.csv"
-        val logger = KotlinLogging.logger {}
-    }
+class CsvService(
+    private val gameFamilyJpaRepo: GameFamilyJpaRepo,
+    private val gitProperties: GitConfigurationProperties
+) {
+    val logger = KotlinLogging.logger {}
+    val dataDirectory: File = File(gitProperties.repoFolder)
+
 
     fun parseGameFamily(): List<GameFamily> {
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
-        }.get().parse(PROJECT_ROOT.resolve(GAME_FAMILY_CSV_PATH).reader())
+        }.get()
+            .parse(getFileReader(gitProperties.repoFolder + gitProperties.gameFamilyCsvFileName))
             .drop(1) // Dropping the header
             .map {
                 GameFamily(
@@ -34,7 +34,8 @@ class CsvService(private val gameFamilyJpaRepo: GameFamilyJpaRepo) {
     fun parseBoardGame(): List<BoardGameItem> { //
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
-        }.get().parse(PROJECT_ROOT.resolve(BOARD_GAME_ITEM_CSV_PATH).reader())
+        }.get()
+            .parse(getFileReader(gitProperties.boardGameCsvFileName))
             .drop(1) // Dropping the header
             .map {
                 val boardGameItem = BoardGameItem(
@@ -82,4 +83,6 @@ class CsvService(private val gameFamilyJpaRepo: GameFamilyJpaRepo) {
         val familyIdList: List<Long> = familyIds.split(",").map { it.toLong() }
         return gameFamilyJpaRepo.findByGameFamilyIdIn(familyIdList)
     }
+
+    fun getFileReader(filePath: String) = dataDirectory.resolve(filePath).reader()
 }

@@ -8,11 +8,7 @@ import de.bgs.secondary.git.GitService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.io.File
-import java.nio.file.Path
 import java.util.concurrent.TimeUnit
-import kotlin.io.path.Path
-import kotlin.system.exitProcess
 
 @Service
 class UpdateService(
@@ -21,27 +17,15 @@ class UpdateService(
     private val boardGameService: BoardGameService,
     private val gameFamilyJpaRepo: GameFamilyJpaRepo
 ) {
-    companion object {
-        const val REPO_URL: String = "https://framagit.org/r.g/board-game-data.git"
-        val PROJECT_ROOT: Path = Path(System.getProperty("user.dir"))
-        val DATA_DIRECTORY: File = File(PROJECT_ROOT.toFile(), "data")
-    }
-
     private val log = KotlinLogging.logger {}
 
     @Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 7)
-    fun updateDatabase(): String {
-        // get git repo
-        val repo = gitService.cloneGitRepository(DATA_DIRECTORY)
-        if (repo.isEmpty) {
-            log.error { "Cloning git Repo failed!" }
-            exitProcess(69)
-        }
-        log.info { "Cloning git Repo successful!" }
+    fun updateDatabase() {
+        // update/pull git repo
+        gitService.pull()
         // parse CSVs and update database
         val parsedItems: List<BoardGameItem> = parseCsv()
         boardGameService.saveBoardGames(parsedItems)
-        return "TODO: Implement me!"
     }
 
     fun parseCsv(): List<BoardGameItem> {
