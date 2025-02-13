@@ -23,11 +23,14 @@ class CsvService(
             .parse(getFileReader(gitProperties.gameFamilyCsvFileName))
             .drop(1) // Dropping the header
             .map {
-                GameFamily(
+                var gameFamily = GameFamily(
                     gameFamilyId = it[0].toLong(),
                     name = it[1]
                 )
+                logger.info { "Successfully parsed GameFamily with Id ${gameFamily.gameFamilyId}" }
+                return@map gameFamily
             }
+
     }
 
     fun parseBoardGame(): List<BoardGameItem> { //
@@ -71,7 +74,7 @@ class CsvService(
                     complexity = it[30].toDouble(),
                     languageDependency = it[31].toDouble()
                 )
-                logger.info { "Successfully parsed $boardGameItem" }
+                logger.info { "Successfully parsed board Game with Id ${boardGameItem.bggId}" }
                 return@map boardGameItem
             }
     }
