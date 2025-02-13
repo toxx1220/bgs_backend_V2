@@ -21,7 +21,7 @@ class CsvService(
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
         }.get()
-            .parse(getFileReader(gitProperties.repoFolder + gitProperties.gameFamilyCsvFileName))
+            .parse(getFileReader(gitProperties.gameFamilyCsvFileName))
             .drop(1) // Dropping the header
             .map {
                 GameFamily(
@@ -84,5 +84,5 @@ class CsvService(
         return gameFamilyJpaRepo.findByGameFamilyIdIn(familyIdList)
     }
 
-    fun getFileReader(filePath: String) = dataDirectory.resolve(filePath).reader()
+    fun getFileReader(fileName: String) = dataDirectory.resolve(fileName).reader()
 }

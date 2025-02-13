@@ -19,19 +19,17 @@ import kotlin.system.exitProcess
 class GitService(private val gitProperties: GitConfigurationProperties) {
     val logger = KotlinLogging.logger {}
     private val dataDirectory: File = File(gitProperties.repoFolder)
-    private final val repository: Repository
+    val repository: Repository = getRepositoryFromPath()
+        .orElseGet {
+            cloneGitRepository()
+                .orElseThrow {
+                    logger.error { "Could not clone repository" }
+                    exitProcess(69)
+                }
+        }
 
     init {
         if (!dataDirectory.exists()) if (!dataDirectory.mkdirs()) throw IOException("Could not create directory: $dataDirectory")
-
-        repository = getRepositoryFromPath()
-            .orElseGet {
-                cloneGitRepository()
-                    .orElseThrow {
-                        logger.error { "Could not clone repository" }
-                        exitProcess(69)
-                    }
-            }
     }
 
     fun pull() {
