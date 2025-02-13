@@ -18,6 +18,8 @@ services:
       GIT_TOKEN: '${GIT_TOKEN}'
     ports:
       - '${APP_PORT}'
+    volumes:
+      - ./data:/data
     networks:
       - tasks-network
     depends_on:
@@ -39,7 +41,7 @@ services:
     ports:
       - '${PG_PORT}'
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0"]
+      test: [ "CMD-SHELL", "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0" ]
       interval: 5s
       timeout: 10s
       retries: 5
@@ -74,5 +76,6 @@ networks:
   tasks-network:
     driver: bridge
 volumes:
+  app-data:
   db-data:
   letsencrypt:

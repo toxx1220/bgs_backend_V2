@@ -18,6 +18,12 @@ import kotlin.system.exitProcess
 @Service
 class GitService(private val gitProperties: GitConfigurationProperties) {
     val logger = KotlinLogging.logger {}
+    val loggerWriter = PrintWriter(object : StringWriter() {
+        override fun flush() {
+            logger.info { toString() }
+            buffer.setLength(0)
+        }
+    })
     private val dataDirectory: File = File(gitProperties.repoRoot)
     val repository: Repository = getRepositoryFromPath()
         .orElseGet {
@@ -57,14 +63,28 @@ class GitService(private val gitProperties: GitConfigurationProperties) {
                 .setDirectory(dataDirectory)
                 .setCredentialsProvider(UsernamePasswordCredentialsProvider("PRIVATE-TOKEN", gitProperties.gitToken))
                 .setProgressMonitor(
-                    TextProgressMonitor(
-                        PrintWriter(
-                            StringWriter().apply { logger.info { this.toString() } },
-                            true
-                        )
-                    )
+                    TextProgressMonitor(loggerWriter)
                 )
+                .setDepth(1) // minimize total download size
+                .setNoCheckout(true)
                 .call().use { git ->
+                    val config = git.repository.config
+                    config.setBoolean("core", null, "sparseCheckout", true)
+
+                    // Create sparse-checkout file with patterns
+                    val sparseCheckoutFile = File(git.repository.directory, "info/sparse-checkout")
+                    sparseCheckoutFile.parentFile.mkdirs()
+                    sparseCheckoutFile.writeText(
+                        """
+                    # Only include these specific files/directories:
+                    /scraped/*.csv
+                """.trimIndent()
+                    )
+
+                    git.checkout()
+                        .setName("main")
+                        .call()
+
                     return Optional.ofNullable(git.repository)
                 }
         } catch (e: GitAPIException) {

@@ -5,4 +5,4 @@ RUN chown spring:spring /bgs
 USER spring:spring
 ARG JAR_FILE=app.jar
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-Xmx1536M", "-jar", "app.jar"]

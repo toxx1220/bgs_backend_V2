@@ -17,6 +17,8 @@ services:
       - '${APP_PORT}:${APP_PORT}'
     networks:
       - tasks-network
+    volumes:
+      - ./volumes/app:/data
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,7 +37,7 @@ services:
     ports:
       - '${PG_PORT}:${PG_PORT}' # TODO: only for debug
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0"]
+      test: [ "CMD-SHELL", "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0" ]
       interval: 5s
       timeout: 10s
       retries: 5
