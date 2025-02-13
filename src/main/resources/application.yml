@@ -20,3 +20,4 @@ git:
   git-token: ${GIT_TOKEN}
   board-game-csv-file-name: board-game-data.csv
   game-family-csv-file-name: game-family-data.csv
+  git-scheduler-enabled: true

@@ -53,13 +53,13 @@ class CsvService(
                     minPlayersBest = it[11].toInt(),
                     maxPlayersBest = it[12].toInt(),
                     minAge = it[13].toInt(),
-                    minAgeRec = it[14].toInt(),
+                    minAgeRec = it[14].toDouble(),
                     minTime = it[15].toInt(),
                     maxTime = it[16].toInt(),
                     // category [17]
                     // mechanic [18]
                     cooperative = it[19].toBoolean(),
-                    compilation = it[20].toBoolean(),
+                    compilation = it[20].toInt(),
 //                    compilationOf = it[21],
                     family = getLinkedFamilies(it[22]),
 //                    implementation = it[23],

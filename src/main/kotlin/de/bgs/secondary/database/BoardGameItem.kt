@@ -35,7 +35,7 @@ class BoardGameItem(
     var minPlayersBest: Int,
     var maxPlayersBest: Int,
     var minAge: Int,
-    var minAgeRec: Int?,
+    var minAgeRec: Double,
     var minTime: Int,
     var maxTime: Int,
 
@@ -46,7 +46,7 @@ class BoardGameItem(
 //    var mechanic: MutableSet<GameMechanic>
 
     var cooperative: Boolean,
-    var compilation: Boolean,
+    var compilation: Int,
 //    var compilationOf: String, //ref what TODO with this? Link to bggId?
 
     @ManyToMany(cascade = [CascadeType.PERSIST])
@@ -70,7 +70,7 @@ class BoardGameItem(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as GameFamily
+        other as BoardGameItem
 
         return technicalId == other.technicalId
     }

@@ -6,10 +6,12 @@ import de.bgs.secondary.database.GameFamily
 import de.bgs.secondary.git.CsvService
 import de.bgs.secondary.git.GitService
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 
+@ConditionalOnProperty(value = ["git.gitSchedulerEnabled"], havingValue = "true")
 @Service
 class UpdateService(
     private val gitService: GitService,
