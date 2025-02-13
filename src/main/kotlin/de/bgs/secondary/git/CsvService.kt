@@ -23,7 +23,7 @@ class CsvService(
             .parse(getFileReader(gitProperties.gameFamilyCsvFileName))
             .drop(1) // Dropping the header
             .map {
-                var gameFamily = GameFamily(
+                val gameFamily = GameFamily(
                     gameFamilyId = it[0].toLong(),
                     name = it[1]
                 )
