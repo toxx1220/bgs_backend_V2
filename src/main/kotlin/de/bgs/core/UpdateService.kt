@@ -19,7 +19,7 @@ class UpdateService(
     private val boardGameService: BoardGameService,
     private val gameFamilyJpaRepo: GameFamilyJpaRepo
 ) {
-    private val log = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger {}
 
     @Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 7)
     fun updateDatabase() {
@@ -28,11 +28,13 @@ class UpdateService(
         // parse CSVs and update database
         val parsedItems: List<BoardGameItem> = parseCsv()
         boardGameService.saveBoardGames(parsedItems)
+        logger.info { "Successfully saved ${parsedItems.size} BoardGameItems" }
     }
 
     fun parseCsv(): List<BoardGameItem> {
         val gameFamilies: List<GameFamily> = csvService.parseGameFamily()
         gameFamilyJpaRepo.saveAllAndFlush(gameFamilies)
+        logger.info { "Successfully saved ${gameFamilies.size} GameFamilies" }
         return csvService.parseBoardGame() // bggId, Item
     }
 }
