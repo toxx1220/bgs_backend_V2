@@ -18,7 +18,7 @@ import kotlin.system.exitProcess
 @Service
 class GitService(private val gitProperties: GitConfigurationProperties) {
     val logger = KotlinLogging.logger {}
-    private val dataDirectory: File = File(gitProperties.repoFolder)
+    private val dataDirectory: File = File(gitProperties.repoRoot)
     val repository: Repository = getRepositoryFromPath()
         .orElseGet {
             cloneGitRepository()

@@ -14,8 +14,7 @@ class CsvService(
     private val gitProperties: GitConfigurationProperties
 ) {
     val logger = KotlinLogging.logger {}
-    val dataDirectory: File = File(gitProperties.repoFolder)
-
+    val repoRoot: File = File(gitProperties.repoRoot)
 
     fun parseGameFamily(): List<GameFamily> {
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
@@ -59,7 +58,7 @@ class CsvService(
                     // category [17]
                     // mechanic [18]
                     cooperative = it[19].toBoolean(),
-                    compilation = it[20].toInt(),
+//                    compilation = it[20].toInt(),
 //                    compilationOf = it[21],
                     family = getLinkedFamilies(it[22]),
 //                    implementation = it[23],
@@ -84,5 +83,5 @@ class CsvService(
         return gameFamilyJpaRepo.findByGameFamilyIdIn(familyIdList)
     }
 
-    fun getFileReader(fileName: String) = dataDirectory.resolve(fileName).reader()
+    fun getFileReader(fileName: String) = repoRoot.resolve(fileName).reader()
 }

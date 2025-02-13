@@ -46,7 +46,7 @@ class BoardGameItem(
 //    var mechanic: MutableSet<GameMechanic>
 
     var cooperative: Boolean,
-    var compilation: Int,
+//    var compilation: Int, TODO: ref
 //    var compilationOf: String, //ref what TODO with this? Link to bggId?
 
     @ManyToMany(cascade = [CascadeType.PERSIST])

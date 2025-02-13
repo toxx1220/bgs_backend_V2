@@ -16,8 +16,8 @@ spring:
 
 git:
   repo-url: https://framagit.org/r.g/board-game-data.git
-  repo-folder: data
   git-token: ${GIT_TOKEN}
-  board-game-csv-file-name: board-game-data.csv
-  game-family-csv-file-name: game-family-data.csv
+  board-game-csv-file-name: scraped/board-game-data.csv
+  game-family-csv-file-name: scraped/game-family-data.csv
   git-scheduler-enabled: true
+  repo-root: data

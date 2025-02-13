@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 data class GitConfigurationProperties(
     var gitSchedulerEnabled: Boolean = false,
     var repoUrl: String = "",
-    var repoFolder: String = "",
+    var repoRoot: String = "",
     var gitToken: String = "",
     var boardGameCsvFileName: String = "",
     var gameFamilyCsvFileName: String = "",

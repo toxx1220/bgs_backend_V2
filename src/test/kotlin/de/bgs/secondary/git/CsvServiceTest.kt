@@ -14,7 +14,7 @@ import org.springframework.test.context.TestPropertySource
 
 @TestPropertySource(
     properties = [
-        "git.repo-folder=src/test/resources",
+        "git.repo-root=src/test/resources",
         "git.board-game-csv-file-name=bgg_GameItem.csv",
         "git.game-family-csv-file-name=bgg_GameFamily.csv"
     ]
@@ -71,7 +71,6 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
                 minTime = 45,
                 maxTime = 90,
                 cooperative = false,
-                compilation = 1,
                 family = expectedGameFamilies,
                 rank = 39,
                 numVotes = 50886,
