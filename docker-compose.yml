@@ -18,7 +18,7 @@ services:
     networks:
       - tasks-network
     volumes:
-      - ./volumes/app:/data
+      - app-data:/data
     depends_on:
       postgres:
         condition: service_healthy
@@ -33,7 +33,7 @@ services:
     networks:
       - tasks-network
     volumes:
-      - ./volumes/postgres:/data/db
+      - db-data:/data/db
     ports:
       - '${PG_PORT}:${PG_PORT}' # TODO: only for debug
     healthcheck:
@@ -41,6 +41,10 @@ services:
       interval: 5s
       timeout: 10s
       retries: 5
+
+volumes:
+  app-data:
+  db-data:
 
 networks:
   tasks-network:

@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.TestPropertySource
+import java.io.File
 
 @TestPropertySource(
     properties = [
-        "git.repo-root=src/test/resources",
         "git.board-game-csv-file-name=bgg_GameItem.csv",
         "git.game-family-csv-file-name=bgg_GameFamily.csv"
     ]
@@ -28,6 +28,8 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
     @Autowired
     private lateinit var csvService: CsvService
 
+    private val repoRoot: File = File("src/test/resources")
+
     @BeforeEach
     fun setUp() {
         gameFamilyRepo.deleteAll()
@@ -35,7 +37,7 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
 
     @Test
     fun parseGameFamily() {
-        val gameFamilies = csvService.parseGameFamily()
+        val gameFamilies = csvService.parseGameFamily(repoRoot)
         assertThat(gameFamilies).containsExactly(
             GameFamily(null, 66553, "Components: Control Boards"),
             GameFamily(null, 64990, "Components: Meeples (Animal) / Animeeples"),
@@ -52,7 +54,7 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
         )
         val expectedGameFamilies = gameFamilyRepo.saveAll(gameFamilies).toMutableSet()
 
-        val boardGames = csvService.parseBoardGame()
+        val boardGames = csvService.parseBoardGame(repoRoot)
 
         assertThat(boardGames).containsExactly(
             BoardGameItem(

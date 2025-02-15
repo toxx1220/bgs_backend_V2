@@ -9,51 +9,44 @@ import org.springframework.stereotype.Service
 import java.io.File
 import java.io.IOException
 import java.util.*
-import kotlin.system.exitProcess
 
 
 @Service
-class GitService(private val gitProperties: GitConfigurationProperties) {
+class GitService(gitProperties: GitConfigurationProperties) {
     val logger = KotlinLogging.logger {}
 
-    private val dataDirectory: File = File(gitProperties.repoRoot)
-    val repository: Repository = getRepositoryFromPath()
-        .orElseGet {
-            cloneGitRepository()
-                .orElseThrow {
-                    logger.error { "Could not clone repository" }
-                    exitProcess(69)
-                }
-        }
+    private val dataDirectory: File = getOrMakeFile(gitProperties.repoRoot)
+    private val repoUrl = gitProperties.repoUrl
+    private val gitToken = gitProperties.gitToken
+    var repository: Repository? = null
 
-    init {
-        if (!dataDirectory.exists()) if (!dataDirectory.mkdirs()) throw IOException("Could not create directory: $dataDirectory")
-    }
-
-    fun pull() {
+    fun pull(repo: Repository) {
         try {
-            Git(repository).pull().call()
+            Git(repo).pull().call()
         } catch (e: GitAPIException) {
             logger.error { "Could not pull repository" }
         }
     }
 
-    private fun getRepositoryFromPath(): Optional<Repository> {
-        return try {
-            Optional.ofNullable(Git.open(dataDirectory).repository)
+    /**
+     * Either gets the existing repository if set, or tries to get it from the directory, and if successful sets it.
+     */
+    fun getRepository(): Optional<Repository> {
+        try {
+            repository = repository ?: Git.open(dataDirectory).repository
+            return Optional.ofNullable(repository)
         } catch (e: IOException) {
-            Optional.empty()
+            return Optional.empty()
         }
     }
 
-    private fun cloneGitRepository(): Optional<Repository> {
-        if (!dataDirectory.exists()) if (!dataDirectory.mkdirs()) throw IOException("Could not create directory: $dataDirectory")
+    fun cloneGitRepository(): Optional<Repository> {
 
         try {
             Git.cloneRepository()
-                .setURI(gitProperties.repoUrl)
+                .setURI(repoUrl)
                 .setDirectory(dataDirectory)
-                .setCredentialsProvider(UsernamePasswordCredentialsProvider("PRIVATE-TOKEN", gitProperties.gitToken))
+                .setCredentialsProvider(UsernamePasswordCredentialsProvider("PRIVATE-TOKEN", gitToken))
                 .setProgressMonitor(LoggingProgressMonitor())
                 .setDepth(1) // minimize total download size
                 .setNoCheckout(true)
@@ -81,4 +74,9 @@ class GitService(private val gitProperties: GitConfigurationProperties) {
         }
     }
 
+    private fun getOrMakeFile(filePath: String): File {
+        val file = File(filePath)
+        if (file.exists() || file.mkdirs()) return file
+        throw IOException("Could not create directory: $dataDirectory")
+    }
 }

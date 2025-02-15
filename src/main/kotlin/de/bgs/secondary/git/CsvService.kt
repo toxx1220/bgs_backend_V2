@@ -11,16 +11,17 @@ import java.io.File
 @Service
 class CsvService(
     private val gameFamilyJpaRepo: GameFamilyJpaRepo,
-    private val gitProperties: GitConfigurationProperties
+    gitProperties: GitConfigurationProperties
 ) {
     val logger = KotlinLogging.logger {}
-    val repoRoot: File = File(gitProperties.repoRoot)
+    val gameFamilyCsvFileName = gitProperties.gameFamilyCsvFileName
+    val boardGameCsvFileName = gitProperties.boardGameCsvFileName
 
-    fun parseGameFamily(): List<GameFamily> {
+    fun parseGameFamily(repoDirectory: File): List<GameFamily> {
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
         }.get()
-            .parse(getFileReader(gitProperties.gameFamilyCsvFileName))
+            .parse(getFileReader(repoDirectory, gameFamilyCsvFileName))
             .drop(1) // Dropping the header
             .map {
                 val gameFamily = GameFamily(
@@ -33,11 +34,11 @@ class CsvService(
 
     }
 
-    fun parseBoardGame(): List<BoardGameItem> { //
+    fun parseBoardGame(repoDirectory: File): List<BoardGameItem> { //
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
         }.get()
-            .parse(getFileReader(gitProperties.boardGameCsvFileName))
+            .parse(getFileReader(repoDirectory, boardGameCsvFileName))
             .drop(1) // Dropping the header
             .map {
                 val boardGameItem = BoardGameItem(
@@ -86,5 +87,5 @@ class CsvService(
         return gameFamilyJpaRepo.findByGameFamilyIdIn(familyIdList)
     }
 
-    fun getFileReader(fileName: String) = repoRoot.resolve(fileName).reader()
+    fun getFileReader(rootDirectory: File, fileName: String) = rootDirectory.resolve(fileName).reader()
 }

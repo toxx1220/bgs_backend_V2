@@ -11,6 +11,13 @@ FROM eclipse-temurin:21-alpine
 ARG GRADLE_DIR
 RUN addgroup --system spring && adduser --system --ingroup spring spring
 WORKDIR /app
+## Add volume directory setup
+VOLUME /data
+RUN mkdir -p /data && \
+    mkdir -p /home/spring/.config/jgit && \
+    chown -R spring:spring /data && \
+    chown -R spring:spring /home/spring
+
 RUN chown spring:spring /app
 USER spring:spring
 COPY --from=build --chown=spring:spring $GRADLE_DIR/build/libs/*.jar app.jar

@@ -6,14 +6,13 @@ import de.bgs.secondary.database.GameFamily
 import de.bgs.secondary.git.CsvService
 import de.bgs.secondary.git.GitService
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.eclipse.jgit.lib.Repository
 import org.springframework.scheduling.annotation.Scheduled
-import org.springframework.stereotype.Service
-import java.util.concurrent.TimeUnit
+import org.springframework.stereotype.Component
+import java.util.concurrent.TimeUnit.DAYS
 
-@ConditionalOnProperty(value = ["git.gitSchedulerEnabled"], havingValue = "true")
-@Service
-class UpdateService(
+@Component
+class UpdateTask(
     private val gitService: GitService,
     private val csvService: CsvService,
     private val boardGameService: BoardGameService,
@@ -21,20 +20,27 @@ class UpdateService(
 ) {
     private val logger = KotlinLogging.logger {}
 
-    @Scheduled(timeUnit = TimeUnit.DAYS, fixedRate = 7)
+    @Scheduled(timeUnit = DAYS, fixedRate = 7)
     fun updateDatabase() {
         // update/pull git repo
-        gitService.pull()
+        val repo: Repository = getRepository()
+        gitService.pull(repo)
         // parse CSVs and update database
-        val parsedItems: List<BoardGameItem> = parseCsv()
+        val parsedItems: List<BoardGameItem> = parseCsv(repo)
         boardGameService.saveBoardGames(parsedItems)
         logger.info { "Successfully saved ${parsedItems.size} BoardGameItems" }
     }
 
-    fun parseCsv(): List<BoardGameItem> {
-        val gameFamilies: List<GameFamily> = csvService.parseGameFamily()
+    fun parseCsv(repo: Repository): List<BoardGameItem> {
+        val gameFamilies: List<GameFamily> = csvService.parseGameFamily(repo.workTree)
         gameFamilyJpaRepo.saveAllAndFlush(gameFamilies)
         logger.info { "Successfully saved ${gameFamilies.size} GameFamilies" }
-        return csvService.parseBoardGame() // bggId, Item
+        return csvService.parseBoardGame(repo.workTree)
+    }
+
+    fun getRepository(): Repository {
+        return gitService.getRepository().orElseGet {
+            gitService.cloneGitRepository().orElseThrow { IllegalStateException("Could not get or clone repository") }
+        }
     }
 }
