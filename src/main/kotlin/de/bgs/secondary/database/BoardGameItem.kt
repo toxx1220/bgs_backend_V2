@@ -13,8 +13,8 @@ class BoardGameItem(
     @Column(unique = true)
     var bggId: Long,
 
-    var name: String,
-    var year: Int,
+    var name: String = "",
+    var year: Int? = null,
 
 //    @ManyToMany
 //    var gameType: MutableSet<GameType>?
@@ -28,16 +28,16 @@ class BoardGameItem(
 //    @ManyToMany
 //    var publisher: MutableSet<GamePublisher>
 
-    var minPlayers: Int,
-    var maxPlayers: Int,
-    var minPlayersRec: Int,
-    var maxPlayersRec: Int,
-    var minPlayersBest: Int,
-    var maxPlayersBest: Int,
-    var minAge: Int,
-    var minAgeRec: Double,
-    var minTime: Int,
-    var maxTime: Int,
+    var minPlayers: Int? = null,
+    var maxPlayers: Int? = null,
+    var minPlayersRec: Int? = null,
+    var maxPlayersRec: Int? = null,
+    var minPlayersBest: Int? = null,
+    var maxPlayersBest: Int? = null,
+    var minAge: Int? = null,
+    var minAgeRec: Double? = null,
+    var minTime: Int? = null,
+    var maxTime: Int? = null,
 
 //    @ManyToMany
 //    var category: MutableSet<GameCategory>
@@ -55,13 +55,13 @@ class BoardGameItem(
 
 //    var implementation: String, //ref
 //    var integration: String, //ref
-    var rank: Int,
-    var numVotes: Int,
-    var avgRating: Double,
-    var stdDevRating: Double,
-    var bayesRating: Double,
-    var complexity: Double,
-    var languageDependency: Double
+    var rank: Int? = null,
+    var numVotes: Int? = null,
+    var avgRating: Double? = null,
+    var stdDevRating: Double? = null,
+    var bayesRating: Double? = null,
+    var complexity: Double? = null,
+    var languageDependency: Double? = null
 ) {
     fun setGameFamily(gameFamily: MutableSet<GameFamily>) {
         this.family = gameFamily

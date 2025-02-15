@@ -15,7 +15,7 @@ class GameFamily(
     @Column(unique = true)
     val gameFamilyId: Long,
 
-    var name: String,
+    var name: String = "",
 
     ) {
     override fun equals(other: Any?): Boolean {

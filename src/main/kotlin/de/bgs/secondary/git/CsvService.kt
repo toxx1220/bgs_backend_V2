@@ -44,21 +44,21 @@ class CsvService(
                 val boardGameItem = BoardGameItem(
                     bggId = it[0].toLong(),
                     name = it[1],
-                    year = it[2].toInt(),
+                    year = it[2].toIntOrNull(),
                     // game type [3]
                     // designer [4]
                     // artist [5]
                     // publisher [6]
-                    minPlayers = it[7].toInt(),
-                    maxPlayers = it[8].toInt(),
-                    minPlayersRec = it[9].toInt(),
-                    maxPlayersRec = it[10].toInt(),
-                    minPlayersBest = it[11].toInt(),
-                    maxPlayersBest = it[12].toInt(),
-                    minAge = it[13].toInt(),
-                    minAgeRec = it[14].toDouble(),
-                    minTime = it[15].toInt(),
-                    maxTime = it[16].toInt(),
+                    minPlayers = it[7].toIntOrNull(),
+                    maxPlayers = it[8].toIntOrNull(),
+                    minPlayersRec = it[9].toIntOrNull(),
+                    maxPlayersRec = it[10].toIntOrNull(),
+                    minPlayersBest = it[11].toIntOrNull(),
+                    maxPlayersBest = it[12].toIntOrNull(),
+                    minAge = it[13].toIntOrNull(),
+                    minAgeRec = it[14].toDoubleOrNull(),
+                    minTime = it[15].toIntOrNull(),
+                    maxTime = it[16].toIntOrNull(),
                     // category [17]
                     // mechanic [18]
                     cooperative = it[19].toBoolean(),
@@ -67,13 +67,13 @@ class CsvService(
                     family = getLinkedFamilies(it[22]),
 //                    implementation = it[23],
 //                    integration = it[24],
-                    rank = it[25].toInt(),
-                    numVotes = it[26].toInt(),
-                    avgRating = it[27].toDouble(),
-                    stdDevRating = it[28].toDouble(),
-                    bayesRating = it[29].toDouble(),
-                    complexity = it[30].toDouble(),
-                    languageDependency = it[31].toDouble()
+                    rank = it[25].toIntOrNull(),
+                    numVotes = it[26].toIntOrNull(),
+                    avgRating = it[27].toDoubleOrNull(),
+                    stdDevRating = it[28].toDoubleOrNull(),
+                    bayesRating = it[29].toDoubleOrNull(),
+                    complexity = it[30].toDoubleOrNull(),
+                    languageDependency = it[31].toDoubleOrNull()
                 )
                 logger.info { "Successfully parsed board Game with Id ${boardGameItem.bggId}" }
                 return@map boardGameItem
