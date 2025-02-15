@@ -33,8 +33,16 @@ class UpdateTask(
 
     fun parseCsv(repo: Repository): List<BoardGameItem> {
         val gameFamilies: List<GameFamily> = csvService.parseGameFamily(repo.workTree)
-        gameFamilyJpaRepo.saveAllAndFlush(gameFamilies)
-        logger.info { "Successfully saved ${gameFamilies.size} GameFamilies" }
+        val existingIds = gameFamilyJpaRepo.findAll().associateBy { it.gameFamilyId }
+
+        val mergedFamilies = gameFamilies.map { newFamily ->
+            existingIds[newFamily.gameFamilyId]?.apply {
+                name = newFamily.name
+            } ?: newFamily
+        }
+
+        gameFamilyJpaRepo.saveAllAndFlush(mergedFamilies)
+        logger.info { "Successfully saved ${mergedFamilies.size} GameFamilies" }
         return csvService.parseBoardGame(repo.workTree)
     }
 
