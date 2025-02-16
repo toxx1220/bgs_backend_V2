@@ -51,7 +51,7 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
         )
         val expectedGameFamilies = gameFamilyRepo.saveAll(gameFamilies).associateBy { it.bggId }
 
-        val boardGames = csvService.parseBoardGame(
+        val boardGames = csvService.parseBoardGamesStream(
             repoRoot,
             expectedGameFamilies,
             emptyMap(),

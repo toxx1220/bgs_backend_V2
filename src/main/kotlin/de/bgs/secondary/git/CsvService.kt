@@ -6,6 +6,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.commons.csv.CSVFormat
 import org.springframework.stereotype.Service
 import java.io.File
+import java.util.stream.Stream
 
 @Service
 class CsvService(
@@ -26,7 +27,7 @@ class CsvService(
     val mechanicCsvFileName = gitProperties.mechanicCsvFileName
     val publisherCsvFileName = gitProperties.publisherCsvFileName
 
-    fun parseBoardGame(
+    fun parseBoardGamesStream(
         repoDirectory: File,
         gameFamilyMap: Map<Long, GameFamily>,
         gameTypeMap: Map<Long, GameType>,
@@ -34,14 +35,14 @@ class CsvService(
         categoryMap: Map<Long, Category>,
         mechanicMap: Map<Long, Mechanic>,
         publisherMap: Map<Long, Publisher>
-    ): List<BoardGameItem> { //
+    ): Stream<BoardGameItem> { //
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
         }.get()
             .parse(getFileReader(repoDirectory, boardGameCsvFileName))
             .drop(1) // Dropping the header
             .map {
-                val boardGameItem = BoardGameItem(
+                BoardGameItem(
                     bggId = it[0].toLong(),
                     name = it[1],
                     year = it[2].toIntOrNull(),
@@ -74,10 +75,11 @@ class CsvService(
                     bayesRating = it[29].toDoubleOrNull(),
                     complexity = it[30].toDoubleOrNull(),
                     languageDependency = it[31].toDoubleOrNull()
-                )
-                logger.info { "Successfully parsed board Game with Id ${boardGameItem.bggId}" }
-                return@map boardGameItem
+                ).also { item ->
+                    logger.info { "Successfully parsed board Game with Id ${item.bggId}" }
+                }
             }
+            .stream()
     }
 
     fun parseGameFamily(repoDirectory: File): List<GameFamily> {
@@ -91,7 +93,6 @@ class CsvService(
                     bggId = it[0].toLong(),
                     name = it[1]
                 )
-                logger.info { "Successfully parsed GameFamily with Id ${gameFamily.bggId}" }
                 return@map gameFamily
             }
     }
@@ -107,7 +108,6 @@ class CsvService(
                     bggId = it[0].toLong(),
                     name = it[1]
                 )
-                logger.info { "Successfully parsed GameType with Id ${gameType.bggId}" }
                 return@map gameType
             }
     }
@@ -123,7 +123,6 @@ class CsvService(
                     bggId = it[0].toLong(),
                     name = it[1]
                 )
-                logger.info { "Successfully parsed Person with Id ${person.bggId}" }
                 return@map person
             }
     }
@@ -139,7 +138,6 @@ class CsvService(
                     bggId = it[0].toLong(),
                     name = it[1]
                 )
-                logger.info { "Successfully parsed Category with Id ${category.bggId}" }
                 return@map category
             }
     }
@@ -155,7 +153,6 @@ class CsvService(
                     bggId = it[0].toLong(),
                     name = it[1]
                 )
-                logger.info { "Successfully parsed Mechanic with Id ${mechanic.bggId}" }
                 return@map mechanic
             }
     }
@@ -171,7 +168,6 @@ class CsvService(
                     bggId = it[0].toLong(),
                     name = it[1]
                 )
-                logger.info { "Successfully parsed Publisher with Id ${publisher.bggId}" }
                 return@map publisher
             }
     }

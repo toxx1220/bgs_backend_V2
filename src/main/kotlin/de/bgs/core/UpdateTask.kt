@@ -1,7 +1,6 @@
 package de.bgs.core
 
 import de.bgs.secondary.*
-import de.bgs.secondary.database.BoardGameItem
 import de.bgs.secondary.database.GameFamily
 import de.bgs.secondary.git.CsvService
 import de.bgs.secondary.git.GitConfigurationProperties
@@ -39,12 +38,6 @@ class UpdateTask(
         val repo: Repository = getRepository()
         gitService.pull(repo)
         // parse CSVs and update database
-        val parsedItems: List<BoardGameItem> = parseCsv(repo)
-        boardGameService.saveBoardGames(parsedItems)
-        logger.info { "Successfully saved ${parsedItems.size} BoardGameItems" }
-    }
-
-    fun parseCsv(repo: Repository): List<BoardGameItem> {
         val gameFamilyMap: Map<Long, GameFamily> =
             gameFamilyJpaRepo.saveAll(csvService.parseGameFamily(repo.workTree)).associateBy { it.bggId }
         logger.info { "Successfully saved ${gameFamilyMap.size} GameFamilies" }
@@ -59,7 +52,7 @@ class UpdateTask(
         val publisherMap = publisherJpaRepo.saveAll(csvService.parsePublisher(repo.workTree)).associateBy { it.bggId }
         logger.info { "Successfully saved ${publisherMap.size} Publisher" }
 
-        return csvService.parseBoardGame(
+        csvService.parseBoardGamesStream(
             repo.workTree,
             gameFamilyMap,
             gameTypeMap,
@@ -67,7 +60,7 @@ class UpdateTask(
             categoryMap,
             mechanicMap,
             publisherMap
-        )
+        ).forEach(boardGameService::saveBoardGame)
     }
 
     fun getRepository(): Repository {
