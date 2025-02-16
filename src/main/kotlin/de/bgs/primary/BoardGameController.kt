@@ -2,6 +2,7 @@ package de.bgs.primary
 
 import de.bgs.core.BoardGameService
 import de.bgs.secondary.database.BoardGameItem
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -20,8 +21,9 @@ class BoardGameController(private val boardGameService: BoardGameService) {
     fun getBoardGame(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int,
-    ): List<BoardGameItem> {
+    ): List<BoardGameItemDto> {
         val pageRequest = PageRequest.of(pageNumber, pageSize)
-        return boardGameService.getBoardGameItems(pageRequest).content
+        val boardGames: Page<BoardGameItem> = boardGameService.getBoardGameItems(pageRequest)
+        return listOf(BoardGameItemDto(boardGames.content, pageNumber, pageSize, boardGames.totalElements))
     }
 }
