@@ -20,25 +20,21 @@ class CsvService(
     val logger = KotlinLogging.logger {}
     val gameFamilyCsvFileName = gitProperties.gameFamilyCsvFileName
     val boardGameCsvFileName = gitProperties.boardGameCsvFileName
+    val gameTypeCsvFileName = gitProperties.gameTypeCsvFileName
+    val personCsvFileName = gitProperties.personCsvFileName
+    val categoryCsvFileName = gitProperties.categoryCsvFileName
+    val mechanicCsvFileName = gitProperties.mechanicCsvFileName
+    val publisherCsvFileName = gitProperties.publisherCsvFileName
 
-    fun parseGameFamily(repoDirectory: File): List<GameFamily> {
-        return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
-            setIgnoreSurroundingSpaces(true)
-        }.get()
-            .parse(getFileReader(repoDirectory, gameFamilyCsvFileName))
-            .drop(1) // Dropping the header
-            .map {
-                val gameFamily = GameFamily(
-                    bggId = it[0].toLong(),
-                    name = it[1]
-                )
-                logger.info { "Successfully parsed GameFamily with Id ${gameFamily.bggId}" }
-                return@map gameFamily
-            }
-
-    }
-
-    fun parseBoardGame(repoDirectory: File): List<BoardGameItem> { //
+    fun parseBoardGame(
+        repoDirectory: File,
+        gameFamilyMap: Map<Long, GameFamily>,
+        gameTypeMap: Map<Long, GameType>,
+        personMap: Map<Long, Person>,
+        categoryMap: Map<Long, Category>,
+        mechanicMap: Map<Long, Mechanic>,
+        publisherMap: Map<Long, Publisher>
+    ): List<BoardGameItem> { //
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
         }.get()
@@ -49,10 +45,10 @@ class CsvService(
                     bggId = it[0].toLong(),
                     name = it[1],
                     year = it[2].toIntOrNull(),
-                    gameTypes = getTypes(it[3]),
-                    designer = getPersonas(it[4]),
-                    artist = getPersonas(it[5]),
-                    publisher = getPublishers(it[6]),
+                    gameTypes = getMatchingBggEntity(it[3], gameTypeMap),
+                    designer = getMatchingBggEntity(it[4], personMap),
+                    artist = getMatchingBggEntity(it[5], personMap),
+                    publisher = getMatchingBggEntity(it[6], publisherMap),
                     minPlayers = it[7].toIntOrNull(),
                     maxPlayers = it[8].toIntOrNull(),
                     minPlayersRec = it[9].toIntOrNull(),
@@ -63,12 +59,12 @@ class CsvService(
                     minAgeRec = it[14].toDoubleOrNull(),
                     minTime = it[15].toIntOrNull(),
                     maxTime = it[16].toIntOrNull(),
-                    category = getCategories(it[17]),
-                    mechanic = getMechanic(it[18]),
+                    category = getMatchingBggEntity(it[17], categoryMap),
+                    mechanic = getMatchingBggEntity(it[18], mechanicMap),
                     cooperative = it[19].toBoolean(),
 //                    compilation = it[20].toInt(),
 //                    compilationOf = it[21],
-                    gameFamilies = getFamilies(it[22]),
+                    gameFamilies = getMatchingBggEntity(it[22], gameFamilyMap),
 //                    implementation = it[23],
 //                    integration = it[24],
                     rank = it[25].toIntOrNull(),
@@ -84,50 +80,107 @@ class CsvService(
             }
     }
 
-    private fun getFamilies(bggIds: String): MutableSet<GameFamily> {
-        if (bggIds.isEmpty()) return mutableSetOf()
-
-        val familyIdList: List<Long> = bggIds.split(",").map { it.toLong() }
-        return gameFamilyJpaRepo.findByBggIdIn(familyIdList)
+    fun parseGameFamily(repoDirectory: File): List<GameFamily> {
+        return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
+            setIgnoreSurroundingSpaces(true)
+        }.get()
+            .parse(getFileReader(repoDirectory, gameFamilyCsvFileName))
+            .drop(1) // Dropping the header
+            .map {
+                val gameFamily = GameFamily(
+                    bggId = it[0].toLong(),
+                    name = it[1]
+                )
+                logger.info { "Successfully parsed GameFamily with Id ${gameFamily.bggId}" }
+                return@map gameFamily
+            }
     }
 
-
-    private fun getTypes(bggIds: String): MutableSet<GameType> {
-        if (bggIds.isEmpty()) return mutableSetOf()
-
-        val types: List<Long> = bggIds.split(",").map { it.toLong() }
-        return gameTypeJpaRepo.findByBggIdIn(types)
+    fun parseGameType(repoDirectory: File): List<GameType> {
+        return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
+            setIgnoreSurroundingSpaces(true)
+        }.get()
+            .parse(getFileReader(repoDirectory, gameTypeCsvFileName))
+            .drop(1) // Dropping the header
+            .map {
+                val gameType = GameType(
+                    bggId = it[0].toLong(),
+                    name = it[1]
+                )
+                logger.info { "Successfully parsed GameType with Id ${gameType.bggId}" }
+                return@map gameType
+            }
     }
 
-
-    private fun getPersonas(bggIds: String): MutableSet<Person> {
-        if (bggIds.isEmpty()) return mutableSetOf()
-
-        val personList: List<Long> = bggIds.split(",").map { it.toLong() }
-        return personJpaRepo.findByBggIdIn(personList)
+    fun parsePerson(repoDirectory: File): List<Person> {
+        return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
+            setIgnoreSurroundingSpaces(true)
+        }.get()
+            .parse(getFileReader(repoDirectory, personCsvFileName))
+            .drop(1) // Dropping the header
+            .map {
+                val person = Person(
+                    bggId = it[0].toLong(),
+                    name = it[1]
+                )
+                logger.info { "Successfully parsed Person with Id ${person.bggId}" }
+                return@map person
+            }
     }
 
-
-    private fun getCategories(bggIds: String): MutableSet<Category> {
-        if (bggIds.isEmpty()) return mutableSetOf()
-
-        val categoryList: List<Long> = bggIds.split(",").map { it.toLong() }
-        return categoryJpaRepo.findByBggIdIn(categoryList)
+    fun parseCategory(repoDirectory: File): List<Category> {
+        return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
+            setIgnoreSurroundingSpaces(true)
+        }.get()
+            .parse(getFileReader(repoDirectory, categoryCsvFileName))
+            .drop(1) // Dropping the header
+            .map {
+                val category = Category(
+                    bggId = it[0].toLong(),
+                    name = it[1]
+                )
+                logger.info { "Successfully parsed Category with Id ${category.bggId}" }
+                return@map category
+            }
     }
 
-
-    private fun getMechanic(bggIds: String): MutableSet<Mechanic> {
-        if (bggIds.isEmpty()) return mutableSetOf()
-
-        val mechanicList: List<Long> = bggIds.split(",").map { it.toLong() }
-        return mechanicJpaRepo.findByBggIdIn(mechanicList)
+    fun parseMechanic(repoDirectory: File): List<Mechanic> {
+        return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
+            setIgnoreSurroundingSpaces(true)
+        }.get()
+            .parse(getFileReader(repoDirectory, mechanicCsvFileName))
+            .drop(1) // Dropping the header
+            .map {
+                val mechanic = Mechanic(
+                    bggId = it[0].toLong(),
+                    name = it[1]
+                )
+                logger.info { "Successfully parsed Mechanic with Id ${mechanic.bggId}" }
+                return@map mechanic
+            }
     }
 
-    private fun getPublishers(bggIds: String): MutableSet<Publisher> {
-        if (bggIds.isEmpty()) return mutableSetOf()
+    fun parsePublisher(repoDirectory: File): List<Publisher> {
+        return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
+            setIgnoreSurroundingSpaces(true)
+        }.get()
+            .parse(getFileReader(repoDirectory, publisherCsvFileName))
+            .drop(1) // Dropping the header
+            .map {
+                val publisher = Publisher(
+                    bggId = it[0].toLong(),
+                    name = it[1]
+                )
+                logger.info { "Successfully parsed Publisher with Id ${publisher.bggId}" }
+                return@map publisher
+            }
+    }
 
-        val publisherList: List<Long> = bggIds.split(",").map { it.toLong() }
-        return publisherJpaRepo.findByBggIdIn(publisherList)
+    private fun <T : BaseEntity> getMatchingBggEntity(bggId: String, bggEntityMap: Map<Long, T>): MutableSet<T> {
+        if (bggId.isEmpty()) return mutableSetOf()
+
+        val bggEntityList: List<Long> = bggId.split(",").map { it.toLong() }
+        return bggEntityMap.filterKeys { bggEntityList.contains(it) }.values.toMutableSet()
     }
 
     fun getFileReader(rootDirectory: File, fileName: String) = rootDirectory.resolve(fileName).reader()

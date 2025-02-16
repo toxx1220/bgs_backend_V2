@@ -3,12 +3,21 @@ package de.bgs.secondary
 import de.bgs.secondary.database.*
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
+import org.springframework.data.jpa.repository.Modifying
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
 interface BoardGameJpaRepo : JpaSpecificationExecutor<BoardGameItem>, JpaRepository<BoardGameItem, Long> {
     fun findByBggId(bggId: Long): Optional<BoardGameItem>
+
+    @Modifying
+    @Query(
+        value = "TRUNCATE TABLE board_game_item RESTART IDENTITY CASCADE",
+        nativeQuery = true
+    )
+    fun truncateWithCascade()
 }
 
 @Repository

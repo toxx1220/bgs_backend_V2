@@ -12,6 +12,8 @@ services:
       - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
     environment:
+      HOME: '${HOME_DIR}'
+      DATA_DIR: '${DATA_DIR}'
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: '${PG_USER}'
       SPRING_DATASOURCE_PASSWORD: '${PG_PASSWORD}'
@@ -19,7 +21,7 @@ services:
     ports:
       - '${APP_PORT}'
     volumes:
-      - app-data:/data
+      - app-data:${DATA_DIR}
     networks:
       - tasks-network
     depends_on:

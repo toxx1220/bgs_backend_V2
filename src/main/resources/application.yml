@@ -11,14 +11,14 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
 
 git:
   repo-url: https://framagit.org/r.g/board-game-data.git
   git-token: ${GIT_TOKEN}
   scheduler-enabled: true
-  repo-root: /data
+  repo-root: ${DATA_DIR}
   board-game-csv-file-name: scraped/bgg_GameItem.csv
   game-family-csv-file-name: scraped/bgg_GameFamily.csv
   mechanic-csv-file-name: scraped/bgg_Mechanic.csv

@@ -1,6 +1,6 @@
 package de.bgs.core
 
-import de.bgs.secondary.GameFamilyJpaRepo
+import de.bgs.secondary.*
 import de.bgs.secondary.database.BoardGameItem
 import de.bgs.secondary.database.GameFamily
 import de.bgs.secondary.git.CsvService
@@ -16,9 +16,14 @@ import java.util.concurrent.TimeUnit.DAYS
 class UpdateTask(
     private val gitService: GitService,
     private val csvService: CsvService,
+    gitConfigurationProperties: GitConfigurationProperties,
     private val boardGameService: BoardGameService,
     private val gameFamilyJpaRepo: GameFamilyJpaRepo,
-    gitConfigurationProperties: GitConfigurationProperties
+    private val gameTypeJpaRepo: GameTypeJpaRepo,
+    private val personJpaRepo: PersonJpaRepo,
+    private val categoryJpaRepo: CategoryJpaRepo,
+    private val mechanicJpaRepo: MechanicJpaRepo,
+    private val publisherJpaRepo: PublisherJpaRepo
 ) {
     private val logger = KotlinLogging.logger {}
     private val schedulerEnabled = gitConfigurationProperties.schedulerEnabled
@@ -29,7 +34,7 @@ class UpdateTask(
             logger.info { "Scheduler is disabled" }
             return
         }
-
+        boardGameService.deleteDatabase()
         // update/pull git repo
         val repo: Repository = getRepository()
         gitService.pull(repo)
@@ -40,18 +45,29 @@ class UpdateTask(
     }
 
     fun parseCsv(repo: Repository): List<BoardGameItem> {
-        val gameFamilies: List<GameFamily> = csvService.parseGameFamily(repo.workTree)
-        val existingGameFamilies: Map<Long, GameFamily> = gameFamilyJpaRepo.findAll().associateBy { it.bggId }
+        val gameFamilyMap: Map<Long, GameFamily> =
+            gameFamilyJpaRepo.saveAll(csvService.parseGameFamily(repo.workTree)).associateBy { it.bggId }
+        logger.info { "Successfully saved ${gameFamilyMap.size} GameFamilies" }
+        val gameTypeMap = gameTypeJpaRepo.saveAll(csvService.parseGameType(repo.workTree)).associateBy { it.bggId }
+        logger.info { "Successfully saved ${gameTypeMap.size} GameTypes" }
+        val personMap = personJpaRepo.saveAll(csvService.parsePerson(repo.workTree)).associateBy { it.bggId }
+        logger.info { "Successfully saved ${personMap.size} Persons" }
+        val categoryMap = categoryJpaRepo.saveAll(csvService.parseCategory(repo.workTree)).associateBy { it.bggId }
+        logger.info { "Successfully saved ${categoryMap.size} Categories" }
+        val mechanicMap = mechanicJpaRepo.saveAll(csvService.parseMechanic(repo.workTree)).associateBy { it.bggId }
+        logger.info { "Successfully saved ${mechanicMap.size} Mechanics" }
+        val publisherMap = publisherJpaRepo.saveAll(csvService.parsePublisher(repo.workTree)).associateBy { it.bggId }
+        logger.info { "Successfully saved ${publisherMap.size} Publisher" }
 
-        val mergedFamilies = gameFamilies.map { newFamily ->
-            existingGameFamilies[newFamily.bggId]?.also { existing ->
-                existing.name = newFamily.name
-            } ?: newFamily
-        }
-
-        gameFamilyJpaRepo.saveAll(mergedFamilies)
-        logger.info { "Successfully saved ${mergedFamilies.size} GameFamilies" }
-        return csvService.parseBoardGame(repo.workTree)
+        return csvService.parseBoardGame(
+            repo.workTree,
+            gameFamilyMap,
+            gameTypeMap,
+            personMap,
+            categoryMap,
+            mechanicMap,
+            publisherMap
+        )
     }
 
     fun getRepository(): Repository {

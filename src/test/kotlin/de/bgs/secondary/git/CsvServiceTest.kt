@@ -49,9 +49,17 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
             GameFamily(null, 64990, "Components: Meeples (Animal) / Animeeples"),
             GameFamily(null, 68769, "Components: Wooden pieces & boards")
         )
-        val expectedGameFamilies = gameFamilyRepo.saveAll(gameFamilies).toMutableSet()
+        val expectedGameFamilies = gameFamilyRepo.saveAll(gameFamilies).associateBy { it.bggId }
 
-        val boardGames = csvService.parseBoardGame(repoRoot)
+        val boardGames = csvService.parseBoardGame(
+            repoRoot,
+            expectedGameFamilies,
+            emptyMap(),
+            emptyMap(),
+            emptyMap(),
+            emptyMap(),
+            emptyMap()
+        )
 
         assertThat(boardGames).containsExactly(
             BoardGameItem(
@@ -70,7 +78,7 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
                 minTime = 45,
                 maxTime = 90,
                 cooperative = false,
-                gameFamilies = expectedGameFamilies,
+                gameFamilies = expectedGameFamilies.values.toMutableSet(),
                 rank = 39,
                 numVotes = 50886,
                 avgRating = 7.97994,
