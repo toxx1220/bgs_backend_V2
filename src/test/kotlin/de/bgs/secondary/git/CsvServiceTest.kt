@@ -1,6 +1,5 @@
 package de.bgs.secondary.git
 
-import de.bgs.MockGitServiceConfig
 import de.bgs.PostgresqlContainerBaseTest
 import de.bgs.secondary.GameFamilyJpaRepo
 import de.bgs.secondary.database.BoardGameItem
@@ -9,17 +8,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Import
 import org.springframework.test.context.TestPropertySource
 import java.io.File
 
 @TestPropertySource(
     properties = [
+        "git.repo-root=src/test/resources",
         "git.board-game-csv-file-name=bgg_GameItem.csv",
         "git.game-family-csv-file-name=bgg_GameFamily.csv"
     ]
 )
-@Import(MockGitServiceConfig::class)
 class CsvServiceTest : PostgresqlContainerBaseTest() {
 
     @Autowired

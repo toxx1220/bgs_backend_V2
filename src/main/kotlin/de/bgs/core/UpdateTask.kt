@@ -29,7 +29,7 @@ class UpdateTask(
             logger.info { "Scheduler is disabled" }
             return
         }
-        
+
         // update/pull git repo
         val repo: Repository = getRepository()
         gitService.pull(repo)
@@ -41,10 +41,10 @@ class UpdateTask(
 
     fun parseCsv(repo: Repository): List<BoardGameItem> {
         val gameFamilies: List<GameFamily> = csvService.parseGameFamily(repo.workTree)
-        val existingGameFamilies: Map<Long, GameFamily> = gameFamilyJpaRepo.findAll().associateBy { it.gameFamilyId }
+        val existingGameFamilies: Map<Long, GameFamily> = gameFamilyJpaRepo.findAll().associateBy { it.bggId }
 
         val mergedFamilies = gameFamilies.map { newFamily ->
-            existingGameFamilies[newFamily.gameFamilyId]?.also { existing ->
+            existingGameFamilies[newFamily.bggId]?.also { existing ->
                 existing.name = newFamily.name
             } ?: newFamily
         }

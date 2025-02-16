@@ -14,6 +14,6 @@ interface BoardGameJpaRepo : JpaSpecificationExecutor<BoardGameItem>, JpaReposit
 
 @Repository
 interface GameFamilyJpaRepo : JpaRepository<GameFamily, Long> {
-    fun findByGameFamilyIdIn(gameFamilyIds: List<Long>): MutableSet<GameFamily>
-    fun findByGameFamilyId(gameFamilyId: Long): Optional<GameFamily>
+    fun findByBggId(gameFamilyId: Long): Optional<GameFamily>
+    fun findByBggIdIn(gameFamilyIds: List<Long>): MutableSet<GameFamily>
 }

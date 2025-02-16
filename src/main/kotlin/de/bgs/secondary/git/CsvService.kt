@@ -25,10 +25,10 @@ class CsvService(
             .drop(1) // Dropping the header
             .map {
                 val gameFamily = GameFamily(
-                    gameFamilyId = it[0].toLong(),
+                    bggId = it[0].toLong(),
                     name = it[1]
                 )
-                logger.info { "Successfully parsed GameFamily with Id ${gameFamily.gameFamilyId}" }
+                logger.info { "Successfully parsed GameFamily with Id ${gameFamily.bggId}" }
                 return@map gameFamily
             }
 
@@ -64,7 +64,7 @@ class CsvService(
                     cooperative = it[19].toBoolean(),
 //                    compilation = it[20].toInt(),
 //                    compilationOf = it[21],
-                    gameFamilies = getLinkedFamilies(it[22]),
+                    gameFamilies = getFamiliesToLink(it[22]),
 //                    implementation = it[23],
 //                    integration = it[24],
                     rank = it[25].toIntOrNull(),
@@ -80,11 +80,11 @@ class CsvService(
             }
     }
 
-    private fun getLinkedFamilies(familyIds: String): MutableSet<GameFamily> {
+    private fun getFamiliesToLink(familyIds: String): MutableSet<GameFamily> {
         if (familyIds.isEmpty()) return mutableSetOf()
 
         val familyIdList: List<Long> = familyIds.split(",").map { it.toLong() }
-        return gameFamilyJpaRepo.findByGameFamilyIdIn(familyIdList)
+        return gameFamilyJpaRepo.findByBggIdIn(familyIdList)
     }
 
     fun getFileReader(rootDirectory: File, fileName: String) = rootDirectory.resolve(fileName).reader()

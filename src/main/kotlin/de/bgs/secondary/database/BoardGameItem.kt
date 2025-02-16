@@ -16,8 +16,9 @@ class BoardGameItem(
     var name: String = "",
     var year: Int? = null,
 
-//    @ManyToMany
-//    var gameType: MutableSet<GameType>?
+    @ManyToMany
+    @JsonManagedReference
+    var gameTypes: MutableSet<GameType>? = mutableSetOf(),
 //
 //    @ManyToMany
 //    var designer: MutableSet<GamePerson>

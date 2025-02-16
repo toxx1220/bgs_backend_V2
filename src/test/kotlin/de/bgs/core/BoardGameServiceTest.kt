@@ -1,6 +1,5 @@
 package de.bgs.core
 
-import de.bgs.MockGitServiceConfig
 import de.bgs.PostgresqlContainerBaseTest
 import de.bgs.secondary.GameFamilyJpaRepo
 import de.bgs.secondary.database.BoardGameItem
@@ -9,9 +8,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Import
 
-@Import(MockGitServiceConfig::class)
 class BoardGameServiceTest : PostgresqlContainerBaseTest() {
 
     @Autowired
@@ -23,7 +20,7 @@ class BoardGameServiceTest : PostgresqlContainerBaseTest() {
     @Test
     fun saveBoardGame() {
         val gameFamily = GameFamily(
-            gameFamilyId = 1,
+            bggId = 1,
             name = "Test Family"
         )
         val savedGameFamily = gameFamilyJpaRepo.save(gameFamily)
@@ -34,7 +31,7 @@ class BoardGameServiceTest : PostgresqlContainerBaseTest() {
             maxPlayers = 4,
             year = 2020
         )
-        val managedGameFamily = gameFamilyJpaRepo.findByGameFamilyId(savedGameFamily.gameFamilyId).get()
+        val managedGameFamily = gameFamilyJpaRepo.findByBggId(savedGameFamily.bggId).get()
         boardGameItem.setGameFamily(mutableSetOf(managedGameFamily))
 
         val savedBoardGame = boardGameService.saveBoardGame(boardGameItem)

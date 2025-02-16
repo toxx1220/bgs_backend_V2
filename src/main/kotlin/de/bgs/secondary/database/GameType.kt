@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 
 @Entity
-class GameFamily(
+class GameType(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,
