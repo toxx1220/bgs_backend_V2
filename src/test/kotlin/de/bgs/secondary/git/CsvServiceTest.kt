@@ -73,7 +73,7 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
                 minTime = 45,
                 maxTime = 90,
                 cooperative = false,
-                family = expectedGameFamilies,
+                gameFamilies = expectedGameFamilies,
                 rank = 39,
                 numVotes = 50886,
                 avgRating = 7.97994,

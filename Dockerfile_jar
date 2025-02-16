@@ -9,7 +9,7 @@ RUN mkdir -p /data && \
     chown -R spring:spring /data && \
     chown -R spring:spring /home/spring
 
-RUN chown spring:spring /app
+RUN chown -R spring:spring /app
 USER spring:spring
 ARG JAR_FILE=build/libs/*.jar
 COPY --chown=spring:spring ${JAR_FILE} app.jar

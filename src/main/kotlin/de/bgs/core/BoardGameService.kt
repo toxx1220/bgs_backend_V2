@@ -2,11 +2,13 @@ package de.bgs.core
 
 import de.bgs.secondary.BoardGameJpaRepo
 import de.bgs.secondary.database.BoardGameItem
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Service
 import java.util.Objects.isNull
 
 @Service
 class BoardGameService(private val boardGameJpaRepo: BoardGameJpaRepo) {
+    private val logger = KotlinLogging.logger {}
 
     fun getBoardGameItems(): MutableList<BoardGameItem> = boardGameJpaRepo.findAll()
 
@@ -21,6 +23,14 @@ class BoardGameService(private val boardGameJpaRepo: BoardGameJpaRepo) {
     }
 
     fun saveBoardGames(boardGameItemList: List<BoardGameItem>): List<BoardGameItem> {
-        return boardGameItemList.stream().map { saveBoardGame(it) }.toList()
+        return boardGameItemList
+            .mapNotNull { boardGameItem ->
+                try {
+                    saveBoardGame(boardGameItem)
+                } catch (e: Exception) {
+                    logger.error(e) { "Could not save BoardGameItem ${boardGameItem.bggId}: ${e.message}" }
+                    null
+                }
+            }
     }
 }

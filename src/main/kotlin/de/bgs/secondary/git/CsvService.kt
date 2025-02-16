@@ -64,7 +64,7 @@ class CsvService(
                     cooperative = it[19].toBoolean(),
 //                    compilation = it[20].toInt(),
 //                    compilationOf = it[21],
-                    family = getLinkedFamilies(it[22]),
+                    gameFamilies = getLinkedFamilies(it[22]),
 //                    implementation = it[23],
 //                    integration = it[24],
                     rank = it[25].toIntOrNull(),

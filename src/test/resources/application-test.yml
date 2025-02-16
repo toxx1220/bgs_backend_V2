@@ -5,3 +5,5 @@ spring:
     show-sql: true
   datasource:
     driver-class-name: org.postgresql.Driver
+git:
+  scheduler-enabled: false

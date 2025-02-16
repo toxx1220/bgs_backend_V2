@@ -45,13 +45,13 @@ class BoardGameItem(
 //    @ManyToMany
 //    var mechanic: MutableSet<GameMechanic>
 
-    var cooperative: Boolean,
+    var cooperative: Boolean = false,
 //    var compilation: Int, TODO: ref
 //    var compilationOf: String, //ref what TODO with this? Link to bggId?
 
     @ManyToMany(cascade = [CascadeType.PERSIST])
     @JsonManagedReference
-    var family: MutableSet<GameFamily>? = mutableSetOf(),
+    var gameFamilies: MutableSet<GameFamily>? = mutableSetOf(),
 
 //    var implementation: String, //ref
 //    var integration: String, //ref
@@ -64,7 +64,7 @@ class BoardGameItem(
     var languageDependency: Double? = null
 ) {
     fun setGameFamily(gameFamily: MutableSet<GameFamily>) {
-        this.family = gameFamily
+        this.gameFamilies = gameFamily
     }
 
     override fun equals(other: Any?): Boolean {

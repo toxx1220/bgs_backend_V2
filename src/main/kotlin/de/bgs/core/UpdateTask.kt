@@ -4,6 +4,7 @@ import de.bgs.secondary.GameFamilyJpaRepo
 import de.bgs.secondary.database.BoardGameItem
 import de.bgs.secondary.database.GameFamily
 import de.bgs.secondary.git.CsvService
+import de.bgs.secondary.git.GitConfigurationProperties
 import de.bgs.secondary.git.GitService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.eclipse.jgit.lib.Repository
@@ -16,12 +17,19 @@ class UpdateTask(
     private val gitService: GitService,
     private val csvService: CsvService,
     private val boardGameService: BoardGameService,
-    private val gameFamilyJpaRepo: GameFamilyJpaRepo
+    private val gameFamilyJpaRepo: GameFamilyJpaRepo,
+    gitConfigurationProperties: GitConfigurationProperties
 ) {
     private val logger = KotlinLogging.logger {}
+    private val schedulerEnabled = gitConfigurationProperties.schedulerEnabled
 
     @Scheduled(timeUnit = DAYS, fixedRate = 7)
     fun updateDatabase() {
+        if (!schedulerEnabled) {
+            logger.info { "Scheduler is disabled" }
+            return
+        }
+        
         // update/pull git repo
         val repo: Repository = getRepository()
         gitService.pull(repo)
@@ -33,22 +41,22 @@ class UpdateTask(
 
     fun parseCsv(repo: Repository): List<BoardGameItem> {
         val gameFamilies: List<GameFamily> = csvService.parseGameFamily(repo.workTree)
-        val existingIds = gameFamilyJpaRepo.findAll().associateBy { it.gameFamilyId }
+        val existingGameFamilies: Map<Long, GameFamily> = gameFamilyJpaRepo.findAll().associateBy { it.gameFamilyId }
 
         val mergedFamilies = gameFamilies.map { newFamily ->
-            existingIds[newFamily.gameFamilyId]?.apply {
-                name = newFamily.name
+            existingGameFamilies[newFamily.gameFamilyId]?.also { existing ->
+                existing.name = newFamily.name
             } ?: newFamily
         }
 
-        gameFamilyJpaRepo.saveAllAndFlush(mergedFamilies)
+        gameFamilyJpaRepo.saveAll(mergedFamilies)
         logger.info { "Successfully saved ${mergedFamilies.size} GameFamilies" }
         return csvService.parseBoardGame(repo.workTree)
     }
 
     fun getRepository(): Repository {
         return gitService.getRepository().orElseGet {
-            gitService.cloneGitRepository().orElseThrow { IllegalStateException("Could not get or clone repository") }
+            gitService.cloneGitRepository().orElseThrow { Exception("Could not get or clone repository") }
         }
     }
 }
