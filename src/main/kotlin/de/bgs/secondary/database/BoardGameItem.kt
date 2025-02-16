@@ -49,7 +49,7 @@ class BoardGameItem(
 //    var compilation: Int, TODO: ref
 //    var compilationOf: String, //ref what TODO with this? Link to bggId?
 
-    @ManyToMany(cascade = [CascadeType.PERSIST])
+    @ManyToMany
     @JsonManagedReference
     var gameFamilies: MutableSet<GameFamily>? = mutableSetOf(),
 
