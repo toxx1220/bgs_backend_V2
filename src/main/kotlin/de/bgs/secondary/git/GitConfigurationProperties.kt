@@ -10,4 +10,9 @@ data class GitConfigurationProperties(
     var gitToken: String = "",
     var boardGameCsvFileName: String = "",
     var gameFamilyCsvFileName: String = "",
+    var gameTypeCsvFileName: String = "",
+    var personCsvFileName: String = "",
+    var categoryCsvFileName: String = "",
+    var mechanicCsvFileName: String = "",
+    var publisherCsvFileName: String = ""
 )

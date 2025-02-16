@@ -20,6 +20,19 @@ abstract class BaseEntity {
 }
 
 @Entity
+class GameFamily(
+    @Id
+    @GeneratedValue
+    override var technicalId: Long? = null,
+
+    @Column(unique = true)
+    override var bggId: Long,
+
+    override var name: String = "",
+
+    ) : BaseEntity()
+
+@Entity
 class GameType(
     @Id
     @GeneratedValue
@@ -33,7 +46,46 @@ class GameType(
     ) : BaseEntity()
 
 @Entity
-class GameFamily(
+class Person(
+    @Id
+    @GeneratedValue
+    override var technicalId: Long? = null,
+
+    @Column(unique = true)
+    override var bggId: Long,
+
+    override var name: String = "",
+
+    ) : BaseEntity()
+
+@Entity
+class Category(
+    @Id
+    @GeneratedValue
+    override var technicalId: Long? = null,
+
+    @Column(unique = true)
+    override var bggId: Long,
+
+    override var name: String = "",
+
+    ) : BaseEntity()
+
+@Entity
+class Mechanic(
+    @Id
+    @GeneratedValue
+    override var technicalId: Long? = null,
+
+    @Column(unique = true)
+    override var bggId: Long,
+
+    override var name: String = "",
+
+    ) : BaseEntity()
+
+@Entity
+class Publisher(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,

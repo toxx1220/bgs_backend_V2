@@ -19,15 +19,15 @@ class BoardGameItem(
     @ManyToMany
     @JsonManagedReference
     var gameTypes: MutableSet<GameType>? = mutableSetOf(),
-//
-//    @ManyToMany
-//    var designer: MutableSet<GamePerson>
-//
-//    @ManyToMany
-//    var artist: MutableSet<GamePerson>
-//
-//    @ManyToMany
-//    var publisher: MutableSet<GamePublisher>
+
+    @ManyToMany
+    var designer: MutableSet<Person>? = mutableSetOf(),
+
+    @ManyToMany
+    var artist: MutableSet<Person>? = mutableSetOf(),
+
+    @ManyToMany
+    var publisher: MutableSet<Publisher>? = mutableSetOf(),
 
     var minPlayers: Int? = null,
     var maxPlayers: Int? = null,
@@ -40,13 +40,14 @@ class BoardGameItem(
     var minTime: Int? = null,
     var maxTime: Int? = null,
 
-//    @ManyToMany
-//    var category: MutableSet<GameCategory>
-//
-//    @ManyToMany
-//    var mechanic: MutableSet<GameMechanic>
+    @ManyToMany
+    var category: MutableSet<Category>? = mutableSetOf(),
+
+    @ManyToMany
+    var mechanic: MutableSet<Mechanic>? = mutableSetOf(),
 
     var cooperative: Boolean = false,
+
 //    var compilation: Int, TODO: ref
 //    var compilationOf: String, //ref what TODO with this? Link to bggId?
 
@@ -56,6 +57,7 @@ class BoardGameItem(
 
 //    var implementation: String, //ref
 //    var integration: String, //ref
+
     var rank: Int? = null,
     var numVotes: Int? = null,
     var avgRating: Double? = null,
@@ -64,9 +66,6 @@ class BoardGameItem(
     var complexity: Double? = null,
     var languageDependency: Double? = null
 ) {
-    fun setGameFamily(gameFamily: MutableSet<GameFamily>) {
-        this.gameFamilies = gameFamily
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

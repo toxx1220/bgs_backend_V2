@@ -17,7 +17,12 @@ spring:
 git:
   repo-url: https://framagit.org/r.g/board-game-data.git
   git-token: ${GIT_TOKEN}
-  board-game-csv-file-name: scraped/bgg_GameItem.csv
-  game-family-csv-file-name: scraped/bgg_GameFamily.csv
   scheduler-enabled: true
   repo-root: /data
+  board-game-csv-file-name: scraped/bgg_GameItem.csv
+  game-family-csv-file-name: scraped/bgg_GameFamily.csv
+  mechanic-csv-file-name: scraped/bgg_Mechanic.csv
+  category-csv-file-name: scraped/bgg_Category.csv
+  game-type-csv-file-name: scraped/bgg_GameType.csv
+  person-csv-file-name: scraped/bgg_Person.csv
+  publisher-csv-file-name: scraped/bgg_Publisher.csv
