@@ -1,6 +1,6 @@
 package de.bgs.secondary.database
 
-import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.*
 
 @MappedSuperclass
 abstract class BaseEntity {
@@ -18,3 +18,29 @@ abstract class BaseEntity {
 
     override fun hashCode(): Int = javaClass.hashCode()
 }
+
+@Entity
+class GameType(
+    @Id
+    @GeneratedValue
+    override var technicalId: Long? = null,
+
+    @Column(unique = true)
+    override var bggId: Long,
+
+    override var name: String = "",
+
+    ) : BaseEntity()
+
+@Entity
+class GameFamily(
+    @Id
+    @GeneratedValue
+    override var technicalId: Long? = null,
+
+    @Column(unique = true)
+    override var bggId: Long,
+
+    override var name: String = "",
+
+    ) : BaseEntity()

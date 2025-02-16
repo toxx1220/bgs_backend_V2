@@ -7,3 +7,4 @@ spring:
     driver-class-name: org.postgresql.Driver
 git:
   scheduler-enabled: false
+  repo-root: src/test/resources

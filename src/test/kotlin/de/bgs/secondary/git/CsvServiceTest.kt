@@ -13,7 +13,6 @@ import java.io.File
 
 @TestPropertySource(
     properties = [
-        "git.repo-root=src/test/resources",
         "git.board-game-csv-file-name=bgg_GameItem.csv",
         "git.game-family-csv-file-name=bgg_GameFamily.csv"
     ]
