@@ -15,4 +15,4 @@ RUN chown -R spring:spring /bgs
 USER spring:spring
 ARG JAR_FILE=app.jar
 COPY --chown=spring:spring ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-XX:+UseZGC", "-Xmx1000M", "-Xms500M", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx850M", "-jar", "app.jar"]

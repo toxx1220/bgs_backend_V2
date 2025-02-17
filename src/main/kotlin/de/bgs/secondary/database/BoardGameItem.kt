@@ -1,6 +1,5 @@
 package de.bgs.secondary.database
 
-import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 
@@ -51,7 +50,6 @@ class BoardGameItem(
 //    var compilationOf: String, //ref what TODO with this? Link to bggId?
 
     @ManyToMany
-    @JsonManagedReference
     var gameFamilies: MutableSet<GameFamily>? = mutableSetOf(),
 
 //    var implementation: String, //ref

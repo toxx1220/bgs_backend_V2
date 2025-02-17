@@ -11,6 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.stream.consumeAsFlow
+import kotlinx.coroutines.withContext
 import org.eclipse.jgit.lib.Repository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -40,7 +41,9 @@ class UpdateTask(
             logger.info { "Scheduler is disabled" }
             return
         }
-        boardGameService.deleteDatabase()
+        withContext(Dispatchers.IO) {
+            boardGameService.deleteDatabase()
+        }
         // update/pull git repo
         val repo: Repository = getRepository()
         gitService.pull(repo)
@@ -69,13 +72,14 @@ class UpdateTask(
             mechanicMap,
             publisherMap
         ).consumeAsFlow()
-            .buffer(capacity = 32, onBufferOverflow = BufferOverflow.SUSPEND)
+            .buffer(capacity = 16, onBufferOverflow = BufferOverflow.SUSPEND)
             .flowOn(Dispatchers.IO)
             .chunked(500)
             .onEach { items ->
                 boardGameJpaRepo.saveAll(items)
                 totalCounter += items.size
                 logger.info { "Executed Batch of size ${items.size}. # items saved: $totalCounter" }
+                System.gc()
             }
             .catch { e -> logger.error(e) { "Pipeline failed $e" } }
             .collect()
