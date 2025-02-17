@@ -75,9 +75,7 @@ class CsvService(
                     bayesRating = it[29].toDoubleOrNull(),
                     complexity = it[30].toDoubleOrNull(),
                     languageDependency = it[31].toDoubleOrNull()
-                ).also { item ->
-                    logger.info { "Successfully parsed board Game with Id ${item.bggId}" }
-                }
+                )
             }
             .stream()
     }

@@ -6,6 +6,11 @@ import de.bgs.secondary.git.CsvService
 import de.bgs.secondary.git.GitConfigurationProperties
 import de.bgs.secondary.git.GitService
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.stream.consumeAsFlow
 import org.eclipse.jgit.lib.Repository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -22,13 +27,15 @@ class UpdateTask(
     private val personJpaRepo: PersonJpaRepo,
     private val categoryJpaRepo: CategoryJpaRepo,
     private val mechanicJpaRepo: MechanicJpaRepo,
-    private val publisherJpaRepo: PublisherJpaRepo
+    private val publisherJpaRepo: PublisherJpaRepo,
+    private val boardGameJpaRepo: BoardGameJpaRepo
 ) {
     private val logger = KotlinLogging.logger {}
     private val schedulerEnabled = gitConfigurationProperties.schedulerEnabled
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Scheduled(timeUnit = DAYS, fixedRate = 7)
-    fun updateDatabase() {
+    suspend fun updateDatabase() {
         if (!schedulerEnabled) {
             logger.info { "Scheduler is disabled" }
             return
@@ -52,6 +59,7 @@ class UpdateTask(
         val publisherMap = publisherJpaRepo.saveAll(csvService.parsePublisher(repo.workTree)).associateBy { it.bggId }
         logger.info { "Successfully saved ${publisherMap.size} Publisher" }
 
+        var totalCounter = 0
         csvService.parseBoardGamesStream(
             repo.workTree,
             gameFamilyMap,
@@ -60,7 +68,17 @@ class UpdateTask(
             categoryMap,
             mechanicMap,
             publisherMap
-        ).forEach(boardGameService::saveBoardGame)
+        ).consumeAsFlow()
+            .buffer(capacity = 32, onBufferOverflow = BufferOverflow.SUSPEND)
+            .flowOn(Dispatchers.IO)
+            .chunked(500)
+            .onEach { items ->
+                boardGameJpaRepo.saveAll(items)
+                totalCounter += items.size
+                logger.info { "Executed Batch of size ${items.size}. # items saved: $totalCounter" }
+            }
+            .catch { e -> logger.error(e) { "Pipeline failed $e" } }
+            .collect()
     }
 
     fun getRepository(): Repository {
