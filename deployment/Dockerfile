@@ -3,15 +3,14 @@ ARG HOME_DIR
 ARG DATA_DIR
 ARG CONTAINER_USER
 ARG CONTAINER_GROUP
-RUN addgroup --system $CONTAINER_GROUP && adduser --system --ingroup $CONTAINER_USER $CONTAINER_GROUP --home $HOME_DIR $CONTAINER_USER
+RUN addgroup --system $CONTAINER_GROUP && adduser --system --ingroup $CONTAINER_GROUP --home $HOME_DIR $CONTAINER_USER
 WORKDIR /bgs
 
-# Add volume directory setup
-VOLUME $DATA_DIR
+# Create directories with explicit ownership
 RUN mkdir -p $DATA_DIR && \
     mkdir -p $HOME_DIR/.config/jgit && \
     chown -R $CONTAINER_USER:$CONTAINER_GROUP $DATA_DIR && \
-    chown -R $CONTAINER_USER:$CONTAINER_GROUP $HOME_HOME_DIR
+    chown -R $CONTAINER_USER:$CONTAINER_GROUP $HOME_DIR
 
 RUN chown -R $CONTAINER_USER:$CONTAINER_GROUP /bgs
 USER $CONTAINER_USER:$CONTAINER_GROUP
