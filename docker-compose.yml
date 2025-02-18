@@ -5,6 +5,11 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile_jar
+      args:
+        HOME_DIR: ${HOME_DIR}
+        DATA_DIR: ${DATA_DIR}
+        CONTAINER_USER: ${CONTAINER_USER}
+        CONTAINER_GROUP: ${CONTAINER_GROUP}
     restart: always
     environment:
       HOME: '${HOME_DIR}'

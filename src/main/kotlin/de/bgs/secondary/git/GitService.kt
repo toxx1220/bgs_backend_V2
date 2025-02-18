@@ -17,14 +17,16 @@ class GitService(gitProperties: GitConfigurationProperties) {
 
     private val dataDirectory: File = getOrMakeFile(gitProperties.repoRoot)
     private val repoUrl = gitProperties.repoUrl
-    private val gitToken = gitProperties.gitToken
+    private val credentialsProvider = UsernamePasswordCredentialsProvider("token", gitProperties.gitToken)
     var repository: Repository? = null
 
     fun pull(repo: Repository) {
         try {
-            Git(repo).pull().call()
+            Git(repo).pull()
+                .setCredentialsProvider(credentialsProvider)
+                .call()
         } catch (e: GitAPIException) {
-            logger.error { "Could not pull repository" }
+            logger.error { "Could not pull repository $repo ${repo.workTree}, due to ${e.printStackTrace()}" }
         }
     }
 
@@ -46,7 +48,7 @@ class GitService(gitProperties: GitConfigurationProperties) {
             Git.cloneRepository()
                 .setURI(repoUrl)
                 .setDirectory(dataDirectory)
-                .setCredentialsProvider(UsernamePasswordCredentialsProvider("PRIVATE-TOKEN", gitToken))
+                .setCredentialsProvider(credentialsProvider)
                 .setProgressMonitor(LoggingProgressMonitor())
                 .setDepth(1) // minimize total download size
                 .setNoCheckout(true)

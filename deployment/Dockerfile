@@ -1,18 +1,20 @@
 FROM openjdk:21-jdk-slim
-RUN addgroup --system spring && adduser --system --ingroup spring spring
+ARG HOME_DIR
+ARG DATA_DIR
+ARG CONTAINER_USER
+ARG CONTAINER_GROUP
+RUN addgroup --system $CONTAINER_GROUP && adduser --system --ingroup $CONTAINER_USER $CONTAINER_GROUP --home $HOME_DIR $CONTAINER_USER
 WORKDIR /bgs
 
-ENV HOME=/home/spring
-
 # Add volume directory setup
-VOLUME /data
-RUN mkdir -p /data && \
-    mkdir -p $HOME/.config/jgit && \
-    chown -R spring:spring /data && \
-    chown -R spring:spring $HOME
+VOLUME $DATA_DIR
+RUN mkdir -p $DATA_DIR && \
+    mkdir -p $HOME_DIR/.config/jgit && \
+    chown -R $CONTAINER_USER:$CONTAINER_GROUP $DATA_DIR && \
+    chown -R $CONTAINER_USER:$CONTAINER_GROUP $HOME_HOME_DIR
 
-RUN chown -R spring:spring /bgs
-USER spring:spring
+RUN chown -R $CONTAINER_USER:$CONTAINER_GROUP /bgs
+USER $CONTAINER_USER:$CONTAINER_GROUP
 ARG JAR_FILE=app.jar
-COPY --chown=spring:spring ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-Xmx850M", "-jar", "app.jar"]
+COPY --chown=$CONTAINER_USER:$CONTAINER_GROUP ${JAR_FILE} app.jar
+ENTRYPOINT ["java", "-Xmx850M", "-Duser.home=${HOME_DIR}", "-jar", "app.jar"]
