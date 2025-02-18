@@ -1,16 +1,12 @@
 package de.bgs.core
 
-enum class Operator {
-    EQUALS,
-    NOT_EQUALS,
-    GREATER_THAN,
-    GREATER_THAN_OR_EQUALS,
-    LESS_THAN,
-    LESS_THAN_OR_EQUALS,
-    LIKE,
-    NOT_LIKE,
-//    IN,
-//    NOT_IN,
-    IS_NULL,
-    IS_NOT_NULL
+enum class Operator(val supportedTypes: Set<Any>) {
+    EQUALS(setOf(String::class, Number::class, Boolean::class)),
+    GREATER_THAN(setOf(Number::class)),
+    GREATER_THAN_OR_EQUALS(setOf(Number::class)),
+    LESS_THAN(setOf(Number::class)),
+    LESS_THAN_OR_EQUALS(setOf(Number::class)),
+    LIKE(setOf(String::class)),
+    IS_TRUE(setOf(Boolean::class)),
+    IS_FALSE(setOf(Boolean::class)),
 }
