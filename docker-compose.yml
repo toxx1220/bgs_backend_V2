@@ -18,6 +18,7 @@ services:
       SPRING_DATASOURCE_USERNAME: '${PG_USER}'
       SPRING_DATASOURCE_PASSWORD: '${PG_PASSWORD}'
       GIT_TOKEN: '${GIT_TOKEN}'
+      SERVER_URL: '${SERVER_URL}'
     expose:
       - '${APP_PORT}'
     ports:

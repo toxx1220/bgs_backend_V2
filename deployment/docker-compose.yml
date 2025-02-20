@@ -10,10 +10,11 @@ services:
         DATA_DIR: ${DATA_DIR}
         CONTAINER_USER: ${CONTAINER_USER}
         CONTAINER_GROUP: ${CONTAINER_GROUP}
+        SERVER_URL: https://${SERVER_URL}
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${APP_NAME}.rule=Host(`${DNS_NAME}`)"
+      - "traefik.http.routers.${APP_NAME}.rule=Host(`${SERVER_URL}`)"
       - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
     environment:
@@ -67,7 +68,7 @@ services:
       # configure https
       - "--entryPoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=mail@${DNS_NAME}"
+      - "--certificatesresolvers.myresolver.acme.email=mail@${SERVER_URL}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       # Redirecting http Requests to https
       - "--entrypoints.web.address=:80"
