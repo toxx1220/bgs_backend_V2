@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "git")
 data class GitConfigurationProperties(
     var schedulerEnabled: Boolean = false,
+    var skipFirstExecution: Boolean = false,
     var repoUrl: String = "",
     var repoRoot: String = "",
     var gitToken: String = "",

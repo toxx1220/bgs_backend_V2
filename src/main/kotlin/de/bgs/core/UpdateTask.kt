@@ -33,12 +33,14 @@ class UpdateTask(
 ) {
     private val logger = KotlinLogging.logger {}
     private val schedulerEnabled = gitConfigurationProperties.schedulerEnabled
+    private var skipExecution = gitConfigurationProperties.skipFirstExecution
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Scheduled(timeUnit = DAYS, fixedRate = 7)
     suspend fun updateDatabase() {
-        if (!schedulerEnabled) {
-            logger.info { "Scheduler is disabled" }
+        if (!schedulerEnabled || skipExecution) {
+            logger.info { "Scheduler is enabled: $schedulerEnabled, skip execution: $skipExecution" }
+            skipExecution = false
             return
         }
         withContext(Dispatchers.IO) {

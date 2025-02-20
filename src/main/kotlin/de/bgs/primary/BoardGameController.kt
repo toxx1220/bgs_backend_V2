@@ -5,10 +5,7 @@ import de.bgs.core.FilterCondition
 import de.bgs.secondary.database.BoardGameItem
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
 @RestController
@@ -33,7 +30,7 @@ class BoardGameController(private val boardGameService: BoardGameService) {
     fun filterBoardGame(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(required = false) filterConditions: Set<FilterCondition> = emptySet(),
+        @RequestBody(required = false) filterConditions: Set<FilterCondition> = emptySet(),
     ): List<BoardGameItemDto> {
         val pageRequest = PageRequest.of(pageNumber, pageSize)
         val boardGames: Page<BoardGameItem> = boardGameService.filterBoardGameItems(filterConditions, pageRequest)
