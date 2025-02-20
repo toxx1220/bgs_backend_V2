@@ -10,26 +10,34 @@ enum class Operator(val supportedTypes: Any) {
     GREATER_THAN_OR_EQUALS(Comparable::class),
     LESS_THAN(Comparable::class),
     LESS_THAN_OR_EQUALS(Comparable::class),
-    LIKE(setOf(String::class)),
-    IS_TRUE(setOf(Boolean::class)),
-    IS_FALSE(setOf(Boolean::class));
+    LIKE(String::class),
+    IS_TRUE(Boolean::class),
+    IS_FALSE(Boolean::class);
 
     @Suppress("UNCHECKED_CAST")
     fun getPredicate(
         criteriaBuilder: CriteriaBuilder,
         expression: Expression<*>,
-        filterValue: Any
+        filterValue: Any?
     ): Predicate {
-        val filterValueClass = filterValue::class
-        val supportedClasses = when (supportedTypes) {
-            is kotlin.reflect.KClass<*> -> setOf(supportedTypes)
-            is Set<*> -> supportedTypes.filterIsInstance<kotlin.reflect.KClass<*>>().toSet()
-            else -> emptySet()
+        if (this in setOf(IS_TRUE, IS_FALSE)) {
+            require(filterValue == null) {
+                "Filter value must be null for operator $this."
+            }
+        } else {
+            require(filterValue != null) {
+                "Filter value must not be null for operator $this."
+            }
+            val filterValueClass = filterValue::class
+            val supportedClasses = when (supportedTypes) {
+                is kotlin.reflect.KClass<*> -> setOf(supportedTypes)
+                is Set<*> -> supportedTypes.filterIsInstance<kotlin.reflect.KClass<*>>().toSet()
+                else -> emptySet()
+            }
+            require(supportedClasses.any { it.java.isAssignableFrom(filterValueClass.java) }) {
+                "Filter value type ${filterValue.javaClass} not supported for operator $this."
+            }
         }
-        require(supportedClasses.any { it.java.isAssignableFrom(filterValueClass.java) }) {
-            "Filter value type \${filterValue.javaClass} not supported for operator \$this."
-        }
-
         return when (this) {
             EQUALS -> criteriaBuilder.equal(expression, filterValue)
             GREATER_THAN -> criteriaBuilder.greaterThan(

@@ -3,7 +3,7 @@ package de.bgs.core
 class FilterCondition(
     val field: BoardGameField,
     val operator: Operator,
-    val filterValue: Any,
+    val filterValue: Any?,
 ) {
     init {
         val fieldType = field.searchField.type.javaType

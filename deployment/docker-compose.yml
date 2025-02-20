@@ -10,7 +10,6 @@ services:
         DATA_DIR: ${DATA_DIR}
         CONTAINER_USER: ${CONTAINER_USER}
         CONTAINER_GROUP: ${CONTAINER_GROUP}
-        SERVER_URL: https://${SERVER_URL}
     restart: always
     labels:
       - "traefik.enable=true"

@@ -18,10 +18,8 @@ spring:
       leak-detection-threshold: 5000
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: false
-server:
-  forward-headers-strategy: framework
 
 git:
   repo-url: https://framagit.org/r.g/board-game-data.git
@@ -36,6 +34,3 @@ git:
   game-type-csv-file-name: scraped/bgg_GameType.csv
   person-csv-file-name: scraped/bgg_Person.csv
   publisher-csv-file-name: scraped/bgg_Publisher.csv
-
-conf:
-  server-url: ${SERVER_URL}

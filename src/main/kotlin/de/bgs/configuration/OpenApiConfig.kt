@@ -6,12 +6,18 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class OpenApiConfig {
+class OpenApiConfig() {
+
     @Bean
-    fun customOpenApi(configurationProperties: ConfigurationProperties): OpenAPI {
-        return OpenAPI().addServersItem(
-            Server()
-                .url(configurationProperties.serverUrl)
-        )
+    fun customOpenApi(): OpenAPI {
+        return OpenAPI()
+            .addServersItem(
+                Server()
+                    .url("http://localhost:8080")
+            )
+            .addServersItem(
+                Server()
+                    .url("https://bgsearch.duckdns.org")
+            )
     }
 }
