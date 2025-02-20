@@ -44,7 +44,7 @@ class UpdateTask(
             return
         }
         withContext(Dispatchers.IO) {
-            boardGameService.deleteDatabase()
+            boardGameService.clearDatabase()
         }
         // update/pull git repo
         val repo: Repository = getRepository()

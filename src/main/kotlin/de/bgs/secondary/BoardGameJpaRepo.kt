@@ -1,8 +1,6 @@
 package de.bgs.secondary
 
 import de.bgs.secondary.database.*
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Modifying
@@ -13,7 +11,6 @@ import java.util.*
 @Repository
 interface BoardGameJpaRepo : JpaSpecificationExecutor<BoardGameItem>, JpaRepository<BoardGameItem, Long> {
     fun findByBggId(bggId: Long): Optional<BoardGameItem>
-    fun findAllBy(specification: BoardGameSpecification, pageable: Pageable): Page<BoardGameItem>
 
     @Modifying
     @Query(

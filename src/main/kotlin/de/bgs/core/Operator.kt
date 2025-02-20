@@ -1,6 +1,7 @@
 package de.bgs.core
 
 import jakarta.persistence.criteria.CriteriaBuilder
+import jakarta.persistence.criteria.Expression
 import jakarta.persistence.criteria.Predicate
 
 enum class Operator(val supportedTypes: Any) {
@@ -16,45 +17,44 @@ enum class Operator(val supportedTypes: Any) {
     @Suppress("UNCHECKED_CAST")
     fun getPredicate(
         criteriaBuilder: CriteriaBuilder,
-        expression: jakarta.persistence.criteria.Expression<*>,
+        expression: Expression<*>,
         filterValue: Any
     ): Predicate {
-        require(filterValue.javaClass.isInstance(supportedTypes)) {
-            "Filter value type ${filterValue.javaClass} is not supported for operator $this"
+        val filterValueClass = filterValue::class
+        val supportedClasses = when (supportedTypes) {
+            is kotlin.reflect.KClass<*> -> setOf(supportedTypes)
+            is Set<*> -> supportedTypes.filterIsInstance<kotlin.reflect.KClass<*>>().toSet()
+            else -> emptySet()
         }
-        require(expression.javaClass.isInstance(supportedTypes)) {
-            "Expression type ${expression.javaClass} is not supported for operator $this"
+        require(supportedClasses.any { it.java.isAssignableFrom(filterValueClass.java) }) {
+            "Filter value type \${filterValue.javaClass} not supported for operator \$this."
         }
 
         return when (this) {
             EQUALS -> criteriaBuilder.equal(expression, filterValue)
             GREATER_THAN -> criteriaBuilder.greaterThan(
-                expression as jakarta.persistence.criteria.Expression<Comparable<Any>>,
+                expression as Expression<Comparable<Any>>,
                 filterValue as Comparable<Any>
             )
 
             GREATER_THAN_OR_EQUALS -> criteriaBuilder.greaterThanOrEqualTo(
-                expression as jakarta.persistence.criteria.Expression<Comparable<Any>>,
+                expression as Expression<Comparable<Any>>,
                 filterValue as Comparable<Any>
             )
 
             LESS_THAN -> criteriaBuilder.lessThan(
-                expression as jakarta.persistence.criteria.Expression<Comparable<Any>>,
+                expression as Expression<Comparable<Any>>,
                 filterValue as Comparable<Any>
             )
 
             LESS_THAN_OR_EQUALS -> criteriaBuilder.lessThanOrEqualTo(
-                expression as jakarta.persistence.criteria.Expression<Comparable<Any>>,
+                expression as Expression<Comparable<Any>>,
                 filterValue as Comparable<Any>
             )
 
-            LIKE -> criteriaBuilder.like(
-                expression as jakarta.persistence.criteria.Expression<String>,
-                filterValue as String
-            )
-
-            IS_TRUE -> criteriaBuilder.isTrue(expression as jakarta.persistence.criteria.Expression<Boolean>)
-            IS_FALSE -> criteriaBuilder.isFalse(expression as jakarta.persistence.criteria.Expression<Boolean>)
+            LIKE -> criteriaBuilder.like(expression as Expression<String>, filterValue as String)
+            IS_TRUE -> criteriaBuilder.isTrue(expression as Expression<Boolean>)
+            IS_FALSE -> criteriaBuilder.isFalse(expression as Expression<Boolean>)
         }
     }
 }
