@@ -20,8 +20,8 @@ class BoardGameService(
 
     fun saveBoardGame(boardGameItem: BoardGameItem): BoardGameItem = boardGameJpaRepo.save(boardGameItem)
 
-    fun filterBoardGameItems(filterConditions: Set<FilterCondition>, pageRequest: PageRequest): Page<BoardGameItem> {
-        val specification = BoardGameSpecification(filterConditions)
+    fun filterBoardGameItems(filterRequest: FilterRequest, pageRequest: PageRequest): Page<BoardGameItem> {
+        val specification = BoardGameSpecification(filterRequest)
         return boardGameJpaRepo.findAll(specification, pageRequest)
     }
 

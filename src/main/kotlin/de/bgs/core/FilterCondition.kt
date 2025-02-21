@@ -1,8 +1,14 @@
 package de.bgs.core
 
-class FilterCondition(
+import io.swagger.v3.oas.annotations.media.Schema
+
+@Schema(description = "One filter condition for board game items.")
+data class FilterCondition(
+    @Schema(description = "Field to filter on.")
     val field: BoardGameField,
+    @Schema(description = "Operator to use for filtering.")
     val operator: Operator,
+    @Schema(description = "Value to filter for. Must be of the correct type for the operator.")
     val filterValue: Any?,
 ) {
     init {
@@ -21,3 +27,8 @@ class FilterCondition(
         }
     }
 }
+
+@Schema(description = "List of filter conditions. Will be AND combined.")
+data class FilterRequest(
+    val filterConditions: Set<FilterCondition> = emptySet(),
+)

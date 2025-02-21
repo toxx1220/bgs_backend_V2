@@ -1,12 +1,12 @@
 package de.bgs.secondary
 
-import de.bgs.core.FilterCondition
+import de.bgs.core.FilterRequest
 import de.bgs.secondary.database.BoardGameItem
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.persistence.criteria.*
 import org.springframework.data.jpa.domain.Specification
 
-class BoardGameSpecification(private val filterConditions: Set<FilterCondition>) : Specification<BoardGameItem> {
+class BoardGameSpecification(private val filterRequest: FilterRequest) : Specification<BoardGameItem> {
     private val logger = KotlinLogging.logger { }
 
     override fun toPredicate(
@@ -15,7 +15,7 @@ class BoardGameSpecification(private val filterConditions: Set<FilterCondition>)
         criteriaBuilder: CriteriaBuilder
     ): Predicate {
         val predicates = ArrayList<Predicate>()
-        for (condition in filterConditions) {
+        for (condition in filterRequest.filterConditions) {
             logger.info { "Processing filter condition: fieldName: ${condition.field.name}, operator: ${condition.operator.name}, filterValue: ${condition.filterValue}" }
 
             val expression: Expression<Any> = if (condition.field.joinAttribute != null) {
