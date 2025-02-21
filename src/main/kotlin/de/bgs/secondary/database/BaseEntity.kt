@@ -72,7 +72,7 @@ class GameCategory(
     ) : BaseEntity()
 
 @Entity
-class Mechanic(
+class GameMechanic(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,

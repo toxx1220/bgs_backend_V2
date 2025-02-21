@@ -1,10 +1,8 @@
 package de.bgs.primary
 
 import de.bgs.secondary.*
-import de.bgs.secondary.database.GameCategory
-import de.bgs.secondary.database.GameFamily
+import de.bgs.secondary.database.*
 import org.springframework.data.domain.PageRequest
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -43,35 +41,35 @@ class EntityController(
     fun getGameMechanic(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
-    ) {
+    ): BaseEntityDto<GameMechanic> {
         val mechanics = mechanicJpaRepo.findAll(PageRequest.of(pageNumber, pageSize))
-        ResponseEntity.ok(BaseEntityDto(mechanics.content, pageNumber, pageSize, mechanics.totalElements))
+        return BaseEntityDto(mechanics.content, pageNumber, pageSize, mechanics.totalElements)
     }
 
     @GetMapping("/gameType", consumes = ["application/json"], produces = ["application/json"])
     fun getGameType(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
-    ) {
+    ): BaseEntityDto<GameType> {
         val gameTypes = gameTypeJpaRepo.findAll(PageRequest.of(pageNumber, pageSize))
-        ResponseEntity.ok(BaseEntityDto(gameTypes.content, pageNumber, pageSize, gameTypes.totalElements))
+        return BaseEntityDto(gameTypes.content, pageNumber, pageSize, gameTypes.totalElements)
     }
 
     @GetMapping("/person", consumes = ["application/json"], produces = ["application/json"])
     fun getPerson(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
-    ) {
+    ): BaseEntityDto<Person> {
         val persons = personJpaRepo.findAll(PageRequest.of(pageNumber, pageSize))
-        ResponseEntity.ok(BaseEntityDto(persons.content, pageNumber, pageSize, persons.totalElements))
+        return BaseEntityDto(persons.content, pageNumber, pageSize, persons.totalElements)
     }
 
     @GetMapping("/publisher", consumes = ["application/json"], produces = ["application/json"])
     fun getPublisher(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
-    ) {
+    ): BaseEntityDto<Publisher> {
         val publishers = publisherJpaRepo.findAll(PageRequest.of(pageNumber, pageSize))
-        ResponseEntity.ok(BaseEntityDto(publishers.content, pageNumber, pageSize, publishers.totalElements))
+        return BaseEntityDto(publishers.content, pageNumber, pageSize, publishers.totalElements)
     }
 }

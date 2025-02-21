@@ -42,7 +42,7 @@ class BoardGameItem(
     var category: MutableSet<GameCategory>? = mutableSetOf(),
 
     @ManyToMany
-    var mechanic: MutableSet<Mechanic>? = mutableSetOf(),
+    var mechanic: MutableSet<GameMechanic>? = mutableSetOf(),
 
     var cooperative: Boolean = false,
 

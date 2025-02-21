@@ -30,7 +30,7 @@ interface PersonJpaRepo : JpaRepository<Person, Long>
 interface CategoryJpaRepo : JpaRepository<GameCategory, Long>
 
 @Repository
-interface MechanicJpaRepo : JpaRepository<Mechanic, Long>
+interface MechanicJpaRepo : JpaRepository<GameMechanic, Long>
 
 @Repository
 interface PublisherJpaRepo : JpaRepository<Publisher, Long>

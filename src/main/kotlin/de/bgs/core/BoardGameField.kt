@@ -27,7 +27,7 @@ enum class BoardGameField(
     MIN_TIME(BoardGameItem_.minTime),
     MAX_TIME(BoardGameItem_.maxTime),
     CATEGORY_NAME(GameCategory_.name, BoardGameItem_.category),
-    MECHANIC_NAME(Mechanic_.name, BoardGameItem_.mechanic),
+    MECHANIC_NAME(GameMechanic_.name, BoardGameItem_.mechanic),
     COOPERATIVE(BoardGameItem_.cooperative),
     GAME_FAMILY_NAME(GameFamily_.name, BoardGameItem_.gameFamilies),
     RANK(BoardGameItem_.rank),

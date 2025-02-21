@@ -24,7 +24,7 @@ class CsvService(
         gameTypeMap: Map<Long, GameType>,
         personMap: Map<Long, Person>,
         gameCategoryMap: Map<Long, GameCategory>,
-        mechanicMap: Map<Long, Mechanic>,
+        gameMechanicMap: Map<Long, GameMechanic>,
         publisherMap: Map<Long, Publisher>
     ): Stream<BoardGameItem> { //
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
@@ -52,7 +52,7 @@ class CsvService(
                     minTime = it[15].toIntOrNull(),
                     maxTime = it[16].toIntOrNull(),
                     category = getMatchingBggEntity(it[17], gameCategoryMap),
-                    mechanic = getMatchingBggEntity(it[18], mechanicMap),
+                    mechanic = getMatchingBggEntity(it[18], gameMechanicMap),
                     cooperative = it[19].toBoolean(),
 //                    compilation = it[20].toInt(),
 //                    compilationOf = it[21],
@@ -131,18 +131,18 @@ class CsvService(
             }
     }
 
-    fun parseMechanic(repoDirectory: File): List<Mechanic> {
+    fun parseMechanic(repoDirectory: File): List<GameMechanic> {
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
         }.get()
             .parse(getFileReader(repoDirectory, mechanicCsvFileName))
             .drop(1) // Dropping the header
             .map {
-                val mechanic = Mechanic(
+                val gameMechanic = GameMechanic(
                     bggId = it[0].toLong(),
                     name = it[1]
                 )
-                return@map mechanic
+                return@map gameMechanic
             }
     }
 

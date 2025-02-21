@@ -49,7 +49,7 @@ class BoardGameServiceTest : PostgresqlContainerBaseTest() {
             bggId = 1,
             name = "Test Category"
         )
-        val mechanic = Mechanic(
+        val gameMechanic = GameMechanic(
             bggId = 1,
             name = "Test Mechanic"
         )
@@ -61,7 +61,7 @@ class BoardGameServiceTest : PostgresqlContainerBaseTest() {
         val savedGameType = gameTypeJpaRepo.save(gameType)
         val savedPerson = personJpaRepo.save(person)
         val savedCategory = categoryJpaRepo.save(gameCategory)
-        val savedMechanic = mechanicJpaRepo.save(mechanic)
+        val savedMechanic = mechanicJpaRepo.save(gameMechanic)
         val savedPublisher = publisherJpaRepo.save(publisher)
 
         val boardGameItem = BoardGameItem(
