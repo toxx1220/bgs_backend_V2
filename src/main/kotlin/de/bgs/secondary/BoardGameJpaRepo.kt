@@ -39,9 +39,9 @@ interface PersonJpaRepo : JpaRepository<Person, Long> {
 }
 
 @Repository
-interface CategoryJpaRepo : JpaRepository<Category, Long> {
-    fun findByBggId(bggId: Long): Optional<Category>
-    fun findByBggIdIn(bggIds: List<Long>): MutableSet<Category>
+interface CategoryJpaRepo : JpaRepository<GameCategory, Long> {
+    fun findByBggId(bggId: Long): Optional<GameCategory>
+    fun findByBggIdIn(bggIds: List<Long>): MutableSet<GameCategory>
 }
 
 @Repository

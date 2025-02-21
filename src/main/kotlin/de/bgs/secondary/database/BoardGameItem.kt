@@ -39,7 +39,7 @@ class BoardGameItem(
     var maxTime: Int? = null,
 
     @ManyToMany
-    var category: MutableSet<Category>? = mutableSetOf(),
+    var category: MutableSet<GameCategory>? = mutableSetOf(),
 
     @ManyToMany
     var mechanic: MutableSet<Mechanic>? = mutableSetOf(),

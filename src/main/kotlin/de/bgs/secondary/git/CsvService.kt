@@ -32,7 +32,7 @@ class CsvService(
         gameFamilyMap: Map<Long, GameFamily>,
         gameTypeMap: Map<Long, GameType>,
         personMap: Map<Long, Person>,
-        categoryMap: Map<Long, Category>,
+        gameCategoryMap: Map<Long, GameCategory>,
         mechanicMap: Map<Long, Mechanic>,
         publisherMap: Map<Long, Publisher>
     ): Stream<BoardGameItem> { //
@@ -60,7 +60,7 @@ class CsvService(
                     minAgeRec = it[14].toDoubleOrNull(),
                     minTime = it[15].toIntOrNull(),
                     maxTime = it[16].toIntOrNull(),
-                    category = getMatchingBggEntity(it[17], categoryMap),
+                    category = getMatchingBggEntity(it[17], gameCategoryMap),
                     mechanic = getMatchingBggEntity(it[18], mechanicMap),
                     cooperative = it[19].toBoolean(),
 //                    compilation = it[20].toInt(),
@@ -125,18 +125,18 @@ class CsvService(
             }
     }
 
-    fun parseCategory(repoDirectory: File): List<Category> {
+    fun parseCategory(repoDirectory: File): List<GameCategory> {
         return CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setIgnoreSurroundingSpaces(true)
         }.get()
             .parse(getFileReader(repoDirectory, categoryCsvFileName))
             .drop(1) // Dropping the header
             .map {
-                val category = Category(
+                val gameCategory = GameCategory(
                     bggId = it[0].toLong(),
                     name = it[1]
                 )
-                return@map category
+                return@map gameCategory
             }
     }
 

@@ -59,7 +59,7 @@ class Person(
     ) : BaseEntity()
 
 @Entity
-class Category(
+class GameCategory(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,
