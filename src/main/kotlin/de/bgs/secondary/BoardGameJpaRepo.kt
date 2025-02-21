@@ -6,12 +6,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import java.util.*
 
 @Repository
 interface BoardGameJpaRepo : JpaSpecificationExecutor<BoardGameItem>, JpaRepository<BoardGameItem, Long> {
-    fun findByBggId(bggId: Long): Optional<BoardGameItem>
-
     @Modifying
     @Query(
         value = "TRUNCATE TABLE board_game_item RESTART IDENTITY CASCADE",
@@ -21,37 +18,19 @@ interface BoardGameJpaRepo : JpaSpecificationExecutor<BoardGameItem>, JpaReposit
 }
 
 @Repository
-interface GameFamilyJpaRepo : JpaRepository<GameFamily, Long> {
-    fun findByBggId(bggId: Long): Optional<GameFamily>
-    fun findByBggIdIn(bggIds: List<Long>): MutableSet<GameFamily>
-}
+interface GameFamilyJpaRepo : JpaRepository<GameFamily, Long>
 
 @Repository
-interface GameTypeJpaRepo : JpaRepository<GameType, Long> {
-    fun findByBggId(bggId: Long): Optional<GameType>
-    fun findByBggIdIn(bggIds: List<Long>): MutableSet<GameType>
-}
+interface GameTypeJpaRepo : JpaRepository<GameType, Long>
 
 @Repository
-interface PersonJpaRepo : JpaRepository<Person, Long> {
-    fun findByBggId(bggId: Long): Optional<Person>
-    fun findByBggIdIn(bggIds: List<Long>): MutableSet<Person>
-}
+interface PersonJpaRepo : JpaRepository<Person, Long>
 
 @Repository
-interface CategoryJpaRepo : JpaRepository<GameCategory, Long> {
-    fun findByBggId(bggId: Long): Optional<GameCategory>
-    fun findByBggIdIn(bggIds: List<Long>): MutableSet<GameCategory>
-}
+interface CategoryJpaRepo : JpaRepository<GameCategory, Long>
 
 @Repository
-interface MechanicJpaRepo : JpaRepository<Mechanic, Long> {
-    fun findByBggId(bggId: Long): Optional<Mechanic>
-    fun findByBggIdIn(bggIds: List<Long>): MutableSet<Mechanic>
-}
+interface MechanicJpaRepo : JpaRepository<Mechanic, Long>
 
 @Repository
-interface PublisherJpaRepo : JpaRepository<Publisher, Long> {
-    fun findByBggId(bggId: Long): Optional<Publisher>
-    fun findByBggIdIn(bggIds: List<Long>): MutableSet<Publisher>
-}
+interface PublisherJpaRepo : JpaRepository<Publisher, Long>

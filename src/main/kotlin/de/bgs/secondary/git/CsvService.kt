@@ -1,8 +1,6 @@
 package de.bgs.secondary.git
 
-import de.bgs.secondary.*
 import de.bgs.secondary.database.*
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.commons.csv.CSVFormat
 import org.springframework.stereotype.Service
 import java.io.File
@@ -10,15 +8,8 @@ import java.util.stream.Stream
 
 @Service
 class CsvService(
-    private val gameFamilyJpaRepo: GameFamilyJpaRepo,
     gitProperties: GitConfigurationProperties,
-    private val gameTypeJpaRepo: GameTypeJpaRepo,
-    private val personJpaRepo: PersonJpaRepo,
-    private val categoryJpaRepo: CategoryJpaRepo,
-    private val mechanicJpaRepo: MechanicJpaRepo,
-    private val publisherJpaRepo: PublisherJpaRepo
 ) {
-    val logger = KotlinLogging.logger {}
     val gameFamilyCsvFileName = gitProperties.gameFamilyCsvFileName
     val boardGameCsvFileName = gitProperties.boardGameCsvFileName
     val gameTypeCsvFileName = gitProperties.gameTypeCsvFileName
