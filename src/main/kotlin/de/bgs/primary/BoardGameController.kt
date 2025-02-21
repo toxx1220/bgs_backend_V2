@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/boardgame")
 class BoardGameController(private val boardGameService: BoardGameService) {
 
-    @GetMapping(consumes = ["application/json"], produces = ["application/json"])
+    @GetMapping(produces = ["application/json"])
     @Operation(summary = "Get board games in a page")
     fun getBoardGame(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,

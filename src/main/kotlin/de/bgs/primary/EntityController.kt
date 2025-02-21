@@ -18,7 +18,7 @@ class EntityController(
 ) {
 
     @GetMapping(
-        "/gameFamily", consumes = ["application/json"], produces = ["application/json"]
+        "/gameFamily", produces = ["application/json"]
     )
     fun getGameFamily(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
@@ -28,7 +28,7 @@ class EntityController(
         return BaseEntityDto(families.content, pageNumber, pageSize, families.totalElements)
     }
 
-    @GetMapping("/gameCategory", consumes = ["application/json"], produces = ["application/json"])
+    @GetMapping("/gameCategory", produces = ["application/json"])
     fun getGameCategory(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
@@ -37,7 +37,7 @@ class EntityController(
         return BaseEntityDto(categories.content, pageNumber, pageSize, categories.totalElements)
     }
 
-    @GetMapping("/gameMechanic", consumes = ["application/json"], produces = ["application/json"])
+    @GetMapping("/gameMechanic", produces = ["application/json"])
     fun getGameMechanic(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
@@ -46,7 +46,7 @@ class EntityController(
         return BaseEntityDto(mechanics.content, pageNumber, pageSize, mechanics.totalElements)
     }
 
-    @GetMapping("/gameType", consumes = ["application/json"], produces = ["application/json"])
+    @GetMapping("/gameType", produces = ["application/json"])
     fun getGameType(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
@@ -55,7 +55,7 @@ class EntityController(
         return BaseEntityDto(gameTypes.content, pageNumber, pageSize, gameTypes.totalElements)
     }
 
-    @GetMapping("/person", consumes = ["application/json"], produces = ["application/json"])
+    @GetMapping("/person", produces = ["application/json"])
     fun getPerson(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
@@ -64,7 +64,7 @@ class EntityController(
         return BaseEntityDto(persons.content, pageNumber, pageSize, persons.totalElements)
     }
 
-    @GetMapping("/publisher", consumes = ["application/json"], produces = ["application/json"])
+    @GetMapping("/publisher", produces = ["application/json"])
     fun getPublisher(
         @RequestParam(required = false, defaultValue = "0") pageNumber: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int
