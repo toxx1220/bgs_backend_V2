@@ -61,7 +61,8 @@ class BoardGameItem(
     var stdDevRating: Double? = null,
     var bayesRating: Double? = null,
     var complexity: Double? = null,
-    var languageDependency: Double? = null
+    var languageDependency: Double? = null,
+    var imageUri: String? = null
 ) {
 
     override fun equals(other: Any?): Boolean {
