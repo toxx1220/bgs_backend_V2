@@ -20,24 +20,6 @@ enum class Operator(val supportedTypes: Any) {
         expression: Expression<*>,
         filterValue: Any?
     ): Predicate {
-        if (this in setOf(IS_TRUE, IS_FALSE)) {
-            require(filterValue == null) {
-                "Filter value must be null for operator $this."
-            }
-        } else {
-            require(filterValue != null) {
-                "Filter value must not be null for operator $this."
-            }
-            val filterValueClass = filterValue::class
-            val supportedClasses = when (supportedTypes) {
-                is kotlin.reflect.KClass<*> -> setOf(supportedTypes)
-                is Set<*> -> supportedTypes.filterIsInstance<kotlin.reflect.KClass<*>>().toSet()
-                else -> emptySet()
-            }
-            require(supportedClasses.any { it.java.isAssignableFrom(filterValueClass.java) }) {
-                "Filter value type ${filterValue.javaClass} not supported for operator $this."
-            }
-        }
         return when (this) {
             EQUALS -> criteriaBuilder.equal(expression, filterValue)
             GREATER_THAN -> criteriaBuilder.greaterThan(
