@@ -9,6 +9,7 @@ import org.w3c.dom.Element
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
+import org.yaml.snakeyaml.util.Tuple
 import java.io.StringReader
 import java.net.URI
 import javax.xml.parsers.DocumentBuilderFactory
@@ -25,13 +26,15 @@ private const val XML_OBJECT_ID_TAG = "objectid"
 
 private const val XML_IMAGE_TAG = "image"
 
+private const val XML_DESCRIPTION_TAG = "description"
+
 @Service
 class MetaDataService {
 
     private val logger = KotlinLogging.logger { }
 
-    fun retrieveImageUris(boardGameItemList: List<BoardGameItem>): List<BoardGameItem> {
-        if (boardGameItemList.all { it.imageUri != null }) return boardGameItemList
+    fun retrieveMetaData(boardGameItemList: List<BoardGameItem>): List<BoardGameItem> {
+        if (boardGameItemList.all { it.imageUri != null && it.description != null }) return boardGameItemList
 
         val client = RestClient.builder()
             .requestFactory(ReactorClientHttpRequestFactory())
@@ -54,11 +57,15 @@ class MetaDataService {
         }
 
 
-        val imageUris = parseImageUriFrom(xmlResponseBody)
-        return boardGameItemList.map { it.imageUri = imageUris[it.bggId]; it }
+        val imageUris: Map<Long, Tuple<String?, String?>> = parseImageUriFrom(xmlResponseBody)
+        return boardGameItemList.map {
+            it.imageUri = imageUris[it.bggId]?._1()
+            it.description = imageUris[it.bggId]?._2()
+            it
+        }
     }
 
-    private fun parseImageUriFrom(xmlString: String): Map<Long, String> {
+    private fun parseImageUriFrom(xmlString: String): Map<Long, Tuple<String?, String?>> {
 
         return try {
             val cleanedXml = xmlString.trim().replace("\uFEFF", "") // Remove UTF-8 BOM if present
@@ -69,16 +76,18 @@ class MetaDataService {
 
             val builder = factory.newDocumentBuilder()
             val document = builder.parse(InputSource(StringReader(cleanedXml)))
-            val boardGameImageUris: MutableMap<Long, String> = mutableMapOf()
+            val boardGameImageUris: MutableMap<Long, Tuple<String?, String?>> = mutableMapOf()
 
             val nodeList: NodeList = document.documentElement.getElementsByTagName(XML_BOARDGAME_TAG)
             for (i in 0 until nodeList.length) {
                 val node = nodeList.item(i) as Element
                 val objectId = node.getAttribute(XML_OBJECT_ID_TAG).toLongOrNull() ?: continue
                 val imageUriItem = node.getElementsByTagName(XML_IMAGE_TAG)
-                    .item(0)?.textContent ?: continue
+                    .item(0)?.textContent?.trim()
+                val description = node.getElementsByTagName(XML_DESCRIPTION_TAG)
+                    .item(0)?.textContent?.trim()
 
-                boardGameImageUris[objectId] = imageUriItem.trim()
+                boardGameImageUris[objectId] = Tuple(imageUriItem, description)
             }
             logger.info { "Successfully parsed URIs $boardGameImageUris" }
 
