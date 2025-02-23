@@ -2,6 +2,7 @@ package de.bgs.secondary.metadata
 
 import de.bgs.secondary.database.BoardGameItem
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.jsoup.Jsoup
 import org.springframework.http.client.ReactorClientHttpRequestFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
@@ -83,9 +84,9 @@ class MetaDataService {
                 val node = nodeList.item(i) as Element
                 val objectId = node.getAttribute(XML_OBJECT_ID_TAG).toLongOrNull() ?: continue
                 val imageUriItem = node.getElementsByTagName(XML_IMAGE_TAG)
-                    .item(0)?.textContent?.trim()
+                    .item(0)?.textContent?.trim()?.let { Jsoup.parse(it).text() }
                 val description = node.getElementsByTagName(XML_DESCRIPTION_TAG)
-                    .item(0)?.textContent?.trim()
+                    .item(0)?.textContent?.trim()?.let { Jsoup.parse(it).text() }
 
                 boardGameImageUris[objectId] = Tuple(imageUriItem, description)
             }
