@@ -21,9 +21,10 @@ class BoardGameService(
 ) {
     private val logger = KotlinLogging.logger { }
 
-    fun getBoardGameItems(pageRequest: PageRequest): Page<BoardGameItem> {
+    fun getBoardGameItems(pageRequest: PageRequest, loadMetaData: Boolean): Page<BoardGameItem> {
         val boardGames = boardGameJpaRepo.findAll(pageRequest)
-        val updatedBoardGames = updateBoardGames(boardGames.content)
+        val updatedBoardGames =
+            if (loadMetaData) updateBoardGames(boardGames.content) else boardGames.content
         return PageImpl(
             updatedBoardGames, pageRequest, boardGames.totalElements
         )
@@ -31,10 +32,15 @@ class BoardGameService(
 
     fun saveBoardGame(boardGameItem: BoardGameItem): BoardGameItem = boardGameJpaRepo.save(boardGameItem)
 
-    fun filterBoardGameItems(filterRequest: FilterRequest, pageRequest: PageRequest): Page<BoardGameItem> {
+    fun filterBoardGameItems(
+        filterRequest: FilterRequest,
+        pageRequest: PageRequest,
+        loadMetaData: Boolean
+    ): Page<BoardGameItem> {
         val specification = BoardGameSpecification(filterRequest)
         val boardGameItemPage: Page<BoardGameItem> = boardGameJpaRepo.findAll(specification, pageRequest)
-        val updatedBoardGames = updateBoardGames(boardGameItemPage.content)
+        val updatedBoardGames =
+            if (loadMetaData) updateBoardGames(boardGameItemPage.content) else boardGameItemPage.content
         return PageImpl(
             updatedBoardGames, pageRequest, boardGameItemPage.totalElements
         )
