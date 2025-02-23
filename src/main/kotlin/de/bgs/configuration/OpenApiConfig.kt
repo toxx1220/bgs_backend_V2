@@ -13,11 +13,11 @@ class OpenApiConfig() {
         return OpenAPI()
             .addServersItem(
                 Server()
-                    .url("http://localhost:8080")
+                    .url("https://bgsearch.duckdns.org")
             )
             .addServersItem(
                 Server()
-                    .url("https://bgsearch.duckdns.org")
+                    .url("http://localhost:8080")
             )
     }
 }
