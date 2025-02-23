@@ -15,34 +15,33 @@ data class FilterCondition(
     val filterValue: Any?,
 ) {
     init {
-        // Convert primitive fields to their wrapper classes
         val fieldType = field.searchField.javaType.let {
             if (it.isPrimitive) it.kotlin.javaObjectType else it
         }
-        val isSupported = when (val types = operator.supportedTypes) {
-            is KClass<*> -> types.java.isAssignableFrom(fieldType)
-            is Set<*> -> types.any { (it as? KClass<*>)?.java?.isAssignableFrom(fieldType) == true }
-            else -> false
+
+        val supportedClasses = when (val types = operator.supportedTypes) {
+            is KClass<*> -> setOf(types.java)
+            is Set<*> -> types.filterIsInstance<KClass<*>>().map { it.java }.toSet()
+            else -> emptySet()
         }
-        require(isSupported) {
-            "Operator ${operator.name} is not supported for field ${field.searchField.name}"
+
+        require(supportedClasses.any { it.isAssignableFrom(fieldType) }) {
+            "Operator ${operator.name} unsupported for field ${field.searchField.name}"
         }
-        if (operator in setOf(IS_TRUE, IS_FALSE)) {
-            require(filterValue == null) {
-                "Filter value must be null for operator $this."
+
+        when (operator) {
+            IS_TRUE, IS_FALSE -> require(filterValue == null) {
+                "Filter value must be null for $operator"
             }
-        } else {
-            require(filterValue != null) {
-                "Filter value must not be null for operator $this."
-            }
-            val filterValueClass = filterValue::class
-            val supportedClasses = when (operator.supportedTypes) {
-                is KClass<*> -> setOf(operator.supportedTypes)
-                is Set<*> -> operator.supportedTypes.filterIsInstance<KClass<*>>().toSet()
-                else -> emptySet()
-            }
-            require(supportedClasses.any { it.java.isAssignableFrom(filterValueClass.java) }) {
-                "Filter value type ${filterValue.javaClass} not supported for operator $this."
+
+            else -> {
+                require(filterValue != null) {
+                    "Filter value required for $operator"
+                }
+                val valueClass = filterValue::class.java
+                require(supportedClasses.any { it.isAssignableFrom(valueClass) }) {
+                    "Invalid filter type ${valueClass.name} for $operator"
+                }
             }
         }
     }
