@@ -42,7 +42,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.1")
     implementation("io.projectreactor.netty:reactor-netty-http:1.2.3")
-    implementation("org.jsoup:jsoup:1.18.3")
+    implementation("org.jsoup:jsoup:1.19.1")
 
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
