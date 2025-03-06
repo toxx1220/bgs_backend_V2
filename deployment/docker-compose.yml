@@ -35,8 +35,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5'
-          memory: 1000M
+          cpus: '3'
+          memory: 6G
 
   postgres:
     image: postgres:latest
@@ -61,7 +61,6 @@ services:
   reverse-proxy:
     image: traefik:latest
     command:
-      - "--api.insecure=true" # Dashboard
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       # configure https

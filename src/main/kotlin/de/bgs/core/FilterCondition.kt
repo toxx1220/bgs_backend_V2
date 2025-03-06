@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 @Schema(description = "One filter condition for board game items.")
 data class FilterCondition(
     @Schema(description = "Field to filter on.")
-    val field: BoardGameField,
+    val field: BoardGameFilterField,
     @Schema(description = "Operator to use for filtering.")
     val operator: Operator,
     @Schema(description = "Value to filter for. Must be of the correct type for the operator.")

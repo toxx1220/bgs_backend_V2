@@ -13,7 +13,7 @@ class OpenApiConfig() {
         return OpenAPI()
             .addServersItem(
                 Server()
-                    .url("https://bgsearch.duckdns.org")
+                    .url("https://bgsearch.toxx.dev")
             )
             .addServersItem(
                 Server()

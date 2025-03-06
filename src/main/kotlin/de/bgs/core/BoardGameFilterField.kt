@@ -4,7 +4,7 @@ import de.bgs.secondary.database.*
 import jakarta.persistence.metamodel.SetAttribute
 import jakarta.persistence.metamodel.SingularAttribute
 
-enum class BoardGameField(
+enum class BoardGameFilterField(
     val searchField: SingularAttribute<*, *>,
     val joinAttribute: SetAttribute<BoardGameItem, out BaseEntity>? = null
 ) {
@@ -12,6 +12,7 @@ enum class BoardGameField(
     BGG_ID(BoardGameItem_.bggId, null),
     NAME(BoardGameItem_.name, null),
     YEAR(BoardGameItem_.year, null),
+    DESCRIPTION(BoardGameItem_.description, null),
     GAME_TYPE_NAME(GameType_.name, BoardGameItem_.gameTypes),
     DESIGNER_NAME(Person_.name, BoardGameItem_.designer),
     ARTIST_NAME(Person_.name, BoardGameItem_.artist),

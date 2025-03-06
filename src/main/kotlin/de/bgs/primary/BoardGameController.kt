@@ -1,6 +1,6 @@
 package de.bgs.primary
 
-import de.bgs.core.BoardGameField
+import de.bgs.core.BoardGameFilterField
 import de.bgs.core.BoardGameService
 import de.bgs.core.BoardGameShortDto
 import de.bgs.core.FilterRequest
@@ -29,7 +29,7 @@ class BoardGameController(private val boardGameService: BoardGameService) {
             required = false,
             defaultValue = "10"
         ) @Schema(description = "If flag loadMetaData is set to true, pageSize is limited to 20.") pageSize: Int,
-        @RequestParam(required = false) sortColumn: BoardGameField?,
+        @RequestParam(required = false) sortColumn: BoardGameFilterField?,
         @RequestParam(required = false, defaultValue = "true") sortAscending: Boolean,
         @RequestParam(required = false, defaultValue = "false") loadMetaDataIfMissing: Boolean,
     ): BoardGamePageDto {
@@ -46,7 +46,7 @@ class BoardGameController(private val boardGameService: BoardGameService) {
             required = false,
             defaultValue = "10"
         ) @Schema(description = "If flag loadMetaData is set to true, pageSize is limited to 20.") pageSize: Int,
-        @RequestParam(required = false) sortColumn: BoardGameField?,
+        @RequestParam(required = false) sortColumn: BoardGameFilterField?,
         @RequestParam(required = false, defaultValue = "true") sortAscending: Boolean,
         @RequestParam(required = false, defaultValue = "false") loadMetaDataIfMissing: Boolean,
         @RequestBody(required = false) filterRequest: FilterRequest = FilterRequest(),
@@ -65,7 +65,7 @@ class BoardGameController(private val boardGameService: BoardGameService) {
             required = false,
             defaultValue = "10"
         ) @Schema(description = "If flag loadMetaData is set to true, pageSize is limited to 20.") pageSize: Int,
-        @RequestParam(required = false) sortColumn: BoardGameField?,
+        @RequestParam(required = false) sortColumn: BoardGameFilterField?,
         @RequestParam(required = false, defaultValue = "true") sortAscending: Boolean,
         @RequestParam(required = false, defaultValue = "false") loadMetaDataIfMissing: Boolean,
         @RequestBody(required = false) filterRequest: FilterRequest = FilterRequest(),
@@ -82,7 +82,7 @@ class BoardGameController(private val boardGameService: BoardGameService) {
     }
 
     private fun getPageRequest(
-        sortColumn: BoardGameField?,
+        sortColumn: BoardGameFilterField?,
         sortAscending: Boolean,
         pageNumber: Int,
         pageSize: Int,

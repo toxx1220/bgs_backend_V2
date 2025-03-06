@@ -89,7 +89,7 @@ class UpdateTask(
             .catch { e -> logger.error(e) { "Pipeline failed $e" } }
             .collect()
         val duration = java.time.Duration.between(updateStartTime, Instant.now())
-        logger.info { "finished update-job successfully in ${duration.toHoursPart()}:${duration.toMinutesPart()}:${duration.toSecondsPart()}!" }
+        logger.info { "finished update-job successfully in ${duration.toHoursPart()}H:${duration.toMinutesPart()}M:${duration.toSecondsPart()}S!" }
     }
 
     fun getRepository(): Repository {
