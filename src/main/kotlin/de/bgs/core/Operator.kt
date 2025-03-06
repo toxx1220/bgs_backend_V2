@@ -42,7 +42,11 @@ enum class Operator(val supportedTypes: Any) {
                 filterValue as Comparable<Any>
             )
 
-            LIKE -> criteriaBuilder.like(expression as Expression<String>, filterValue as String)
+            LIKE -> criteriaBuilder.like(
+                criteriaBuilder.lower(expression as Expression<String>),
+                (filterValue as String).lowercase()
+            )
+
             IS_TRUE -> criteriaBuilder.isTrue(expression as Expression<Boolean>)
             IS_FALSE -> criteriaBuilder.isFalse(expression as Expression<Boolean>)
         }
