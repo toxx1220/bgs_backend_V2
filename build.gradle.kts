@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "2.1.10"
     kotlin("plugin.spring") version "2.1.10"
-    id("org.springframework.boot") version "3.4.2"
+    id("org.springframework.boot") version "3.4.3"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "2.1.10"
     kotlin("kapt") version "2.1.10"
@@ -34,7 +34,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
-    implementation("org.hibernate:hibernate-jpamodelgen:6.6.8.Final")
+    implementation("org.hibernate:hibernate-jpamodelgen:6.6.9.Final")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.1.0.202411261347-r")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.4")
     implementation("org.apache.commons:commons-csv:1.13.0")
@@ -42,7 +42,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.1")
     implementation("io.projectreactor.netty:reactor-netty-http:1.2.3")
-    implementation("org.jsoup:jsoup:1.18.3")
+    implementation("org.jsoup:jsoup:1.19.1")
 
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -57,7 +57,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    kapt("org.hibernate:hibernate-jpamodelgen:6.6.8.Final")
+    kapt("org.hibernate:hibernate-jpamodelgen:6.6.9.Final")
 }
 
 val kaptPath = "${layout.buildDirectory}/generated/source/kaptKotlin/main"
