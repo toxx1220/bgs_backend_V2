@@ -1,7 +1,6 @@
 package de.bgs.core
 
-import de.bgs.secondary.BoardGameJpaRepo
-import de.bgs.secondary.BoardGameSpecification
+import de.bgs.secondary.*
 import de.bgs.secondary.database.BoardGameItem
 import de.bgs.secondary.metadata.MetaDataService
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -17,7 +16,13 @@ import kotlin.concurrent.thread
 class BoardGameService(
     private val boardGameJpaRepo: BoardGameJpaRepo,
     private val entityManager: EntityManager,
-    private val metaDataService: MetaDataService
+    private val metaDataService: MetaDataService,
+    private val gameFamilyJpaRepo: GameFamilyJpaRepo,
+    private val gameTypeJpaRepo: GameTypeJpaRepo,
+    private val personJpaRepo: PersonJpaRepo,
+    private val mechanicJpaRepo: MechanicJpaRepo,
+    private val publisherJpaRepo: PublisherJpaRepo,
+    private val categoryJpaRepo: CategoryJpaRepo
 ) {
     private val logger = KotlinLogging.logger { }
 
@@ -65,6 +70,12 @@ class BoardGameService(
     fun clearDatabase() {
         logger.info { "Clearing Database!" }
         boardGameJpaRepo.truncateWithCascade()
+        gameFamilyJpaRepo.truncateWithCascade()
+        gameTypeJpaRepo.truncateWithCascade()
+        categoryJpaRepo.truncateWithCascade()
+        personJpaRepo.truncateWithCascade()
+        mechanicJpaRepo.truncateWithCascade()
+        publisherJpaRepo.truncateWithCascade()
         entityManager.clear()
     }
 }

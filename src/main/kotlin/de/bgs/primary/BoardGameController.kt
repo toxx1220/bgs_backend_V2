@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/boardgame")
 class BoardGameController(private val boardGameService: BoardGameService) {
 
-    private final val DEFAULT_SORT_COLUMN = Sort.by(BoardGameItem_.BGG_ID)
+    companion object {
+        private val DEFAULT_SORT_COLUMN = Sort.by(BoardGameItem_.BGG_ID)
+    }
 
     @GetMapping(produces = ["application/json"])
     @Operation(summary = "Get board games in a page")

@@ -20,7 +20,7 @@ abstract class BaseEntity {
 }
 
 @Entity
-class GameFamily(
+data class GameFamily(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,
@@ -33,7 +33,7 @@ class GameFamily(
     ) : BaseEntity()
 
 @Entity
-class GameType(
+data class GameType(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,
@@ -46,7 +46,7 @@ class GameType(
     ) : BaseEntity()
 
 @Entity
-class Person(
+data class Person(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,
@@ -59,7 +59,7 @@ class Person(
     ) : BaseEntity()
 
 @Entity
-class GameCategory(
+data class GameCategory(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,
@@ -72,7 +72,7 @@ class GameCategory(
     ) : BaseEntity()
 
 @Entity
-class GameMechanic(
+data class GameMechanic(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,
@@ -85,7 +85,7 @@ class GameMechanic(
     ) : BaseEntity()
 
 @Entity
-class Publisher(
+data class Publisher(
     @Id
     @GeneratedValue
     override var technicalId: Long? = null,

@@ -25,7 +25,7 @@ git:
   repo-url: https://framagit.org/r.g/board-game-data.git
   git-token: ${GIT_TOKEN}
   scheduler-enabled: true
-  skip-first-execution: true
+  skip-first-execution: false
   repo-root: ${DATA_DIR}
   board-game-csv-file-name: scraped/bgg_GameItem.csv
   game-family-csv-file-name: scraped/bgg_GameFamily.csv

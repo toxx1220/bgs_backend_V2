@@ -28,6 +28,7 @@ class GitService(gitProperties: GitConfigurationProperties) {
         } catch (e: GitAPIException) {
             logger.error { "Could not pull repository $repo ${repo.workTree}, due to ${e.printStackTrace()}" }
         }
+        logger.info { "Successfully pulled git Repo: ${repo.identifier}" }
     }
 
     /**

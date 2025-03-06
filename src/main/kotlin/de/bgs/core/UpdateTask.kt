@@ -10,11 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.stream.consumeAsFlow
-import kotlinx.coroutines.withContext
 import org.eclipse.jgit.lib.Repository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.time.Instant
 import java.util.concurrent.TimeUnit.DAYS
 
 @Component
@@ -38,13 +39,15 @@ class UpdateTask(
     @OptIn(ExperimentalCoroutinesApi::class)
     @Scheduled(timeUnit = DAYS, fixedRate = 7)
     suspend fun updateDatabase() {
+        val updateStartTime: Instant = Instant.now()
         if (!schedulerEnabled || skipExecution) {
             logger.info { "Scheduler is enabled: $schedulerEnabled, skip execution: $skipExecution" }
             skipExecution = false
             return
         }
-        withContext(Dispatchers.IO) {
+        runBlocking {
             boardGameService.clearDatabase()
+            logger.info { "Database has been cleared!" }
         }
         // update/pull git repo
         val repo: Repository = getRepository()
@@ -85,6 +88,8 @@ class UpdateTask(
             }
             .catch { e -> logger.error(e) { "Pipeline failed $e" } }
             .collect()
+        val duration = java.time.Duration.between(updateStartTime, Instant.now())
+        logger.info { "finished update-job successfully in ${duration.toHoursPart()}:${duration.toMinutesPart()}:${duration.toSecondsPart()}!" }
     }
 
     fun getRepository(): Repository {

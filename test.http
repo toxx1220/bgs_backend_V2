@@ -1,0 +1,20 @@
+### GET request to example server
+POST https://bgsearch.duckdns.org/boardgame/short?pageNumber=0&pageSize=10&loadMetaDataIfMissing=true
+Content-Type: application/json
+
+{
+  "filterConditions": [
+    {
+      "field": "MIN_AGE",
+      "operator": "GREATER_THAN_OR_EQUALS",
+      "filterValue": 0
+    },
+    {
+      "field": "MIN_AGE",
+      "operator": "LESS_THAN_OR_EQUALS",
+      "filterValue": 14
+    }
+  ]
+}
+
+###

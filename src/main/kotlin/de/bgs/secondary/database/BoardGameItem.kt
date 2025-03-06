@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import org.hibernate.Hibernate
 
 @Entity
-class BoardGameItem(
+data class BoardGameItem(
     @Id
     @GeneratedValue
     var technicalId: Long? = null,
