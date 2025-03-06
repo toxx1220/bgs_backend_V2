@@ -35,8 +35,6 @@ class MetaDataService {
     private val logger = KotlinLogging.logger { }
 
     fun retrieveMetaData(boardGameItemList: List<BoardGameItem>): List<BoardGameItem> {
-        if (boardGameItemList.all { it.imageUri != null && it.description != null }) return boardGameItemList
-
         val client = RestClient.builder()
             .requestFactory(ReactorClientHttpRequestFactory())
             .build()

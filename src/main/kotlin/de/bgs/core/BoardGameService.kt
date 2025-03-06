@@ -52,6 +52,7 @@ class BoardGameService(
     }
 
     fun updateBoardGames(boardGameItemList: List<BoardGameItem>): List<BoardGameItem> {
+        if (boardGameItemList.all { it.imageUri != null && it.description != null }) return boardGameItemList
         val updatedBoardGames = metaDataService.retrieveMetaData(boardGameItemList)
         thread { // asynchronously update board games
             updatedBoardGames.forEach { boardGameItem ->
