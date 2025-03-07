@@ -44,11 +44,15 @@ enum class Operator(val supportedTypes: Any) {
 
             LIKE -> criteriaBuilder.like(
                 criteriaBuilder.lower(expression as Expression<String>),
-                (filterValue as String).lowercase()
+                getStringForLike(filterValue as String)
             )
 
             IS_TRUE -> criteriaBuilder.isTrue(expression as Expression<Boolean>)
             IS_FALSE -> criteriaBuilder.isFalse(expression as Expression<Boolean>)
         }
+    }
+
+    private fun getStringForLike(filterValue: String): String {
+        return "%${filterValue.lowercase()}%"
     }
 }
