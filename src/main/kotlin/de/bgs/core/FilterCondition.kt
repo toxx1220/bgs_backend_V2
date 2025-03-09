@@ -4,6 +4,7 @@ import de.bgs.core.Operator.IS_FALSE
 import de.bgs.core.Operator.IS_TRUE
 import io.swagger.v3.oas.annotations.media.Schema
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSuperclassOf
 
 @Schema(description = "One filter condition for board game items.")
 data class FilterCondition(
@@ -15,17 +16,16 @@ data class FilterCondition(
     val filterValue: Any?,
 ) {
     init {
-        val fieldType = field.searchField.javaType.let {
-            if (it.isPrimitive) it.kotlin.javaObjectType else it
-        }
+        val fieldKClass = field.searchField.javaType.kotlin
 
-        val supportedClasses = when (val types = operator.supportedTypes) {
-            is KClass<*> -> setOf(types.java)
-            is Set<*> -> types.filterIsInstance<KClass<*>>().map { it.java }.toSet()
+        // Convert operator.supportedTypes to a Set of KClass
+        val supportedKClasses = when (val types = operator.supportedTypes) {
+            is KClass<*> -> setOf(types)
+            is Set<*> -> types.filterIsInstance<KClass<*>>().toSet()
             else -> emptySet()
         }
 
-        require(supportedClasses.any { it.isAssignableFrom(fieldType) }) {
+        require(supportedKClasses.any { it.isSuperclassOf(fieldKClass) }) {
             "Operator ${operator.name} unsupported for field ${field.searchField.name}"
         }
 
@@ -38,9 +38,13 @@ data class FilterCondition(
                 require(filterValue != null) {
                     "Filter value required for $operator"
                 }
-                val valueClass = filterValue::class.java
-                require(supportedClasses.any { it.isAssignableFrom(valueClass) }) {
-                    "Invalid filter type ${valueClass.name} for $operator"
+
+                // Get the Kotlin KClass for the filter value
+                val valueKClass = filterValue::class
+
+                // Check compatibility using Kotlin's type system
+                require(supportedKClasses.any { it.isSuperclassOf(valueKClass) }) {
+                    "Invalid filter type ${valueKClass.simpleName} for $operator"
                 }
             }
         }
