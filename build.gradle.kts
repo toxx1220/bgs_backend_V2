@@ -36,7 +36,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-undertow")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
     implementation("org.hibernate:hibernate-jpamodelgen:6.6.12.Final")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.2.0.202503040940-r")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")
