@@ -37,7 +37,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
-    implementation("org.hibernate:hibernate-jpamodelgen:6.6.12.Final")
+    implementation("org.hibernate:hibernate-jpamodelgen:6.6.13.Final")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.2.0.202503040940-r")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")
     implementation("org.apache.commons:commons-csv:1.14.0")
@@ -60,7 +60,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    kapt("org.hibernate:hibernate-jpamodelgen:6.6.12.Final")
+    kapt("org.hibernate:hibernate-jpamodelgen:6.6.13.Final")
 }
 
 val kaptPath = "${layout.buildDirectory}/generated/source/kaptKotlin/main"
