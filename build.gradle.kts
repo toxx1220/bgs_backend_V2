@@ -39,7 +39,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
     implementation("org.hibernate:hibernate-jpamodelgen:6.6.12.Final")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.2.0.202503040940-r")
-    implementation("io.github.oshai:kotlin-logging-jvm:7.0.5")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")
     implementation("org.apache.commons:commons-csv:1.14.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.1")
