@@ -49,7 +49,7 @@ dependencies {
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")
     implementation("org.apache.commons:commons-csv:1.14.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
     implementation("io.projectreactor.netty:reactor-netty-http:1.2.4")
     implementation("org.jsoup:jsoup:1.19.1")
