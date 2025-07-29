@@ -1,6 +1,8 @@
 # bgs_backend_V2
 
-`.env` File needed at project root. Example Env-File:
+Backend for [Board Game Search App](https://github.com/krahl-jan/bgsearchapp).
+
+Currently due to time constraints a`.env` File is needed at project root. Example Env-File:
 ```
 APP_NAME=bgs-backend
 APP_PORT=8080
@@ -24,3 +26,8 @@ http://localhost:8080/swagger-ui/index.html
 Connection to the Database outside of the Docker Container (using example env file data):
 `jdbc:postgresql://localhost:5432/bgs`
 Connecting from inside the Docker, host needs to be swapped to `${PG_HOST}`
+
+TODO:
+- [ ] Use Secret Manager
+- [ ] Add Union Operators
+- [ ] Automate Deployments using watchtower or similar

@@ -1,5 +1,5 @@
 # Application Deployment Notes
-needs its on .env file. Sample:
+needs its own .env file. Sample:
 ```env
 APP_NAME=bgs-backend
 APP_PORT=8080
