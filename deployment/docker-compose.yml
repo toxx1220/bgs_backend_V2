@@ -35,8 +35,13 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '3'
-          memory: 6G
+          cpus: '1'
+          memory: 3500M
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:${APP_PORT}/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   postgres:
     image: postgres:latest
