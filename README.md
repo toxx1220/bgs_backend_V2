@@ -31,3 +31,4 @@ TODO:
 - [ ] Use Secret Manager
 - [ ] Add Union Operators
 - [ ] Automate Deployments using watchtower or similar
+- [ ] Add manual trigger for db job
