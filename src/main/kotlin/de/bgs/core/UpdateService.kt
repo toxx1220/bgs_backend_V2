@@ -2,24 +2,30 @@ package de.bgs.core
 
 import de.bgs.secondary.*
 import de.bgs.secondary.database.GameFamily
+import de.bgs.secondary.database.UpdateTaskInformation
 import de.bgs.secondary.git.CsvService
 import de.bgs.secondary.git.GitConfigurationProperties
 import de.bgs.secondary.git.GitService
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.stream.consumeAsFlow
+import kotlinx.coroutines.withContext
 import org.eclipse.jgit.lib.Repository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.concurrent.TimeUnit.DAYS
 
 @Component
-class UpdateTask(
+class UpdateService(
     private val gitService: GitService,
     private val csvService: CsvService,
     gitConfigurationProperties: GitConfigurationProperties,
@@ -30,28 +36,50 @@ class UpdateTask(
     private val categoryJpaRepo: CategoryJpaRepo,
     private val mechanicJpaRepo: MechanicJpaRepo,
     private val publisherJpaRepo: PublisherJpaRepo,
-    private val boardGameJpaRepo: BoardGameJpaRepo
+    private val boardGameJpaRepo: BoardGameJpaRepo,
+    private val updateTaskInformationRepo: UpdateTaskInformationRepo
 ) {
     private val logger = KotlinLogging.logger {}
     private val schedulerEnabled = gitConfigurationProperties.schedulerEnabled
-    private var skipExecution = gitConfigurationProperties.skipFirstExecution
+    private var skipFirstExecution = gitConfigurationProperties.skipFirstExecution
+    private val utcZone = ZoneOffset.UTC
+    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Scheduled(timeUnit = DAYS, fixedRate = 7)
-    suspend fun updateDatabase() {
-        val updateStartTime: Instant = Instant.now()
-        if (!schedulerEnabled || skipExecution) {
-            logger.info { "Scheduler is enabled: $schedulerEnabled, skip execution: $skipExecution" }
-            skipExecution = false
+    private suspend fun scheduledUpdateDatabase() {
+        if (!schedulerEnabled || skipFirstExecution) {
+            logger.info { "Scheduler is enabled: $schedulerEnabled, skip execution: $skipFirstExecution" }
+            skipFirstExecution = false
             return
         }
-        runBlocking {
-            boardGameService.clearDatabase()
-            logger.info { "Database has been cleared!" }
+        updateDatabase()
+    }
+
+    fun triggerUpdateDatabase() {
+        serviceScope.launch {
+            updateDatabase()
         }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private suspend fun updateDatabase() = withContext(Dispatchers.IO) {
+        val updateStartTime: LocalDateTime = LocalDateTime.now(utcZone)
+        val lastExecution = updateTaskInformationRepo.findTopByOrderByLastUpdateTaskTimeDesc()?.lastUpdateTaskTime
+            ?: LocalDateTime.MIN
+        val atLeastOneDaySinceLastExecution = lastExecution.plusDays(1)
+            .isBefore(updateStartTime)
+        if (!atLeastOneDaySinceLastExecution) {
+            logger.info { "Skipping execution of update task. Last execution was less than 24h ago." }
+            return@withContext
+        }
+
+        boardGameService.clearDatabase()
+        logger.info { "Database has been cleared!" }
+
         // update/pull git repo
         val repo: Repository = getRepository()
         gitService.pull(repo)
+
         // parse CSVs and update database
         val gameFamilyMap: Map<Long, GameFamily> =
             gameFamilyJpaRepo.saveAll(csvService.parseGameFamily(repo.workTree)).associateBy { it.bggId }
@@ -89,6 +117,11 @@ class UpdateTask(
             .catch { e -> logger.error(e) { "Pipeline failed $e" } }
             .collect()
         val duration = java.time.Duration.between(updateStartTime, Instant.now())
+        val info = UpdateTaskInformation(
+            lastUpdateTaskTime = updateStartTime,
+            executionDurationInMinutes = duration.toMinutes()
+        )
+        updateTaskInformationRepo.save<UpdateTaskInformation>(info)
         logger.info { "finished update-job successfully in ${duration.toHoursPart()}H:${duration.toMinutesPart()}M:${duration.toSecondsPart()}S!" }
     }
 

@@ -4,6 +4,7 @@ import de.bgs.core.BoardGameFilterField
 import de.bgs.core.BoardGameService
 import de.bgs.core.BoardGameShortDto
 import de.bgs.core.FilterRequest
+import de.bgs.core.UpdateService
 import de.bgs.primary.dto.BoardGamePageDto
 import de.bgs.primary.dto.BoardGameShortPageDto
 import de.bgs.secondary.database.BoardGameItem
@@ -13,11 +14,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/boardgame")
-class BoardGameController(private val boardGameService: BoardGameService) {
+class BoardGameController(private val boardGameService: BoardGameService, private val updateService: UpdateService) {
 
     companion object {
         private val DEFAULT_SORT_COLUMN = Sort.by(BoardGameItem_.BGG_ID)
@@ -38,6 +40,13 @@ class BoardGameController(private val boardGameService: BoardGameService) {
         val pageRequest = getPageRequest(sortColumn, sortAscending, pageNumber, pageSize, loadMetaDataIfMissing)
         val boardGames: Page<BoardGameItem> = boardGameService.getBoardGameItems(pageRequest, loadMetaDataIfMissing)
         return BoardGamePageDto(boardGames.content, pageNumber, pageSize, boardGames.totalElements)
+    }
+
+    @GetMapping(path = ["/update"])
+    @Operation(summary = "Manually trigger update of board game data")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun updateBoardGameData() {
+        updateService.triggerUpdateDatabase()
     }
 
     @PostMapping(consumes = ["application/json"], produces = ["application/json"])
