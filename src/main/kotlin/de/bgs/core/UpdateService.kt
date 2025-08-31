@@ -7,19 +7,14 @@ import de.bgs.secondary.git.CsvService
 import de.bgs.secondary.git.GitConfigurationProperties
 import de.bgs.secondary.git.GitService
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.stream.consumeAsFlow
-import kotlinx.coroutines.withContext
 import org.eclipse.jgit.lib.Repository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import java.time.Instant
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.concurrent.TimeUnit.DAYS
@@ -116,7 +111,7 @@ class UpdateService(
             }
             .catch { e -> logger.error(e) { "Pipeline failed $e" } }
             .collect()
-        val duration = java.time.Duration.between(updateStartTime, Instant.now())
+        val duration = Duration.between(updateStartTime, LocalDateTime.now(utcZone))
         val info = UpdateTaskInformation(
             lastUpdateTaskTime = updateStartTime,
             executionDurationInMinutes = duration.toMinutes()
