@@ -2,6 +2,8 @@
 
 Backend for [Board Game Search App](https://github.com/krahl-jan/bgsearchapp).
 
+Currently hosted at [bgsearch.toxx.dev](https://bgsearch.toxx.dev/swagger-ui/index.html)
+
 Currently due to time constraints a`.env` File is needed at project root. Example Env-File:
 ```
 APP_NAME=bgs-backend
