@@ -38,7 +38,7 @@ services:
           cpus: '1'
           memory: 3500M
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:${APP_PORT}/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:${APP_PORT}/actuator/health/liveness" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -77,7 +77,11 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-    ports:
+      # Healthcheck ping endpoint (internal)
+      - "--entryPoints.traefik.address=:8080"
+      - "--ping=true"
+      - "--ping.entryPoint=traefik"
+      # Port mapping
       - "80:80"
       - "443:443"
     depends_on:
@@ -87,6 +91,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock # Enable Traefik docker listening
     networks:
       - tasks-network
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping=true", "--ping.entryPoint=traefik"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
   tasks-network:

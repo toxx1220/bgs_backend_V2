@@ -20,6 +20,16 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+    web:
+      exposure:
+        include: health
+
 
 git:
   repo-url: https://framagit.org/r.g/board-game-data.git

@@ -1,9 +1,10 @@
-FROM openjdk:21-jdk-slim
+FROM openjdk:21-jdk
 ARG HOME_DIR
 ARG DATA_DIR
 ARG CONTAINER_USER
 ARG CONTAINER_GROUP
-RUN addgroup --system $CONTAINER_GROUP && adduser --system --ingroup $CONTAINER_GROUP --home $HOME_DIR $CONTAINER_USER
+RUN groupadd -r $CONTAINER_GROUP && \
+    useradd -r -g $CONTAINER_GROUP -d $HOME_DIR -s /bin/false $CONTAINER_USER
 WORKDIR /bgs
 
 # Create directories with explicit ownership
