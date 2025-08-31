@@ -4,6 +4,8 @@ import de.bgs.core.BoardGameFilterField
 import de.bgs.core.BoardGameService
 import de.bgs.core.BoardGameShortDto
 import de.bgs.core.FilterRequest
+import de.bgs.primary.dto.BoardGamePageDto
+import de.bgs.primary.dto.BoardGameShortPageDto
 import de.bgs.secondary.database.BoardGameItem
 import de.bgs.secondary.database.BoardGameItem_
 import io.swagger.v3.oas.annotations.Operation

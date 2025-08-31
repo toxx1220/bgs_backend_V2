@@ -1,5 +1,6 @@
 package de.bgs.primary
 
+import de.bgs.primary.dto.BaseEntityDto
 import de.bgs.secondary.*
 import de.bgs.secondary.database.*
 import org.springframework.data.domain.PageRequest

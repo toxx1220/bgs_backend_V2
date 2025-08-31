@@ -5,6 +5,7 @@ import de.bgs.core.BoardGameFilterField
 import de.bgs.core.FilterCondition
 import de.bgs.core.FilterRequest
 import de.bgs.core.Operator
+import de.bgs.primary.dto.BoardGamePageDto
 import de.bgs.secondary.BoardGameJpaRepo
 import de.bgs.secondary.database.BoardGameItem
 import de.bgs.util.BoardGameTestData.Companion.testBoardGame

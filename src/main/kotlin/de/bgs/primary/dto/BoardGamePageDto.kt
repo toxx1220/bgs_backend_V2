@@ -1,4 +1,4 @@
-package de.bgs.primary
+package de.bgs.primary.dto
 
 import de.bgs.secondary.database.BoardGameItem
 
