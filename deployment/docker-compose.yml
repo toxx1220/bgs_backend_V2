@@ -66,6 +66,7 @@ services:
   reverse-proxy:
     image: traefik:latest
     command:
+      - "--log.level=DEBUG"
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
       # configure https
@@ -81,7 +82,7 @@ services:
       - "--entryPoints.traefik.address=:8080"
       - "--ping=true"
       - "--ping.entryPoint=traefik"
-      # Port mapping
+    ports:
       - "80:80"
       - "443:443"
     depends_on:
