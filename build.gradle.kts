@@ -4,7 +4,7 @@ plugins {
     kotlin("plugin.jpa") version "2.2.0"
     id("org.springframework.boot") version "3.5.5"
     id("io.spring.dependency-management") version "1.1.7"
-    kotlin("kapt") version "2.2.0"
+    kotlin("kapt") version "2.2.10"
     idea
 }
 
