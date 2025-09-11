@@ -10,7 +10,7 @@ services:
         DATA_DIR: ${DATA_DIR}
         CONTAINER_USER: ${CONTAINER_USER}
         CONTAINER_GROUP: ${CONTAINER_GROUP}
-    restart: always
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${APP_NAME}.rule=Host(`${SERVER_URL}`)"
@@ -46,7 +46,7 @@ services:
   postgres:
     image: postgres:latest
     container_name: ${PG_HOST}
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: '${PG_DATABASE}'
       POSTGRES_USER: '${PG_USER}'
@@ -65,6 +65,7 @@ services:
 
   reverse-proxy:
     image: traefik:latest
+    restart: unless-stopped
     command:
       - "--log.level=INFO"
       - "--providers.docker"
