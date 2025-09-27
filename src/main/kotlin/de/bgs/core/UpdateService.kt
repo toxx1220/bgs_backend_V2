@@ -12,7 +12,6 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.stream.consumeAsFlow
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import org.eclipse.jgit.lib.Repository
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -65,7 +64,7 @@ class UpdateService(
             logger.info { "Update task is locked, skipping execution." }
             return@withContext
         }
-        mutex.withLock {
+        try {
             val updateStartTime: LocalDateTime = LocalDateTime.now(utcZone)
             val lastExecution = updateTaskInformationRepo.findTopByOrderByLastUpdateTaskTimeDesc()?.lastUpdateTaskTime
                 ?: LocalDateTime.MIN
@@ -127,6 +126,8 @@ class UpdateService(
             )
             updateTaskInformationRepo.save<UpdateTaskInformation>(info)
             logger.info { "finished update-job successfully in ${duration.toHoursPart()}H:${duration.toMinutesPart()}M:${duration.toSecondsPart()}S!" }
+        } finally {
+            mutex.unlock()
         }
     }
 
