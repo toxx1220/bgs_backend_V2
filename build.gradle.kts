@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.spring") version "2.2.21"
-    kotlin("plugin.jpa") version "2.2.21"
+    kotlin("jvm") version "2.3.0-RC"
+    kotlin("plugin.spring") version "2.3.0-RC"
+    kotlin("plugin.jpa") version "2.3.0-RC"
     id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
-    kotlin("kapt") version "2.2.21"
+    kotlin("kapt") version "2.3.0-RC"
     idea
 }
 
@@ -13,7 +13,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -41,7 +41,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
     }
-    implementation("org.springframework.boot:spring-boot-starter-undertow")
+    implementation("org.springframework.boot:spring-boot-starter-jetty")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -62,8 +62,8 @@ dependencies {
 
     // Kapt dependencies
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-    kapt("org.hibernate.orm:hibernate-jpamodelgen")
-    kaptTest("org.hibernate.orm:hibernate-jpamodelgen")
+    kapt("org.hibernate.orm:hibernate-jpamodelgen:7.1.8.Final")
+    kaptTest("org.hibernate.orm:hibernate-jpamodelgen:7.1.8.Final")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
