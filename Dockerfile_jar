@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:25-jdk
 ARG HOME_DIR
 ARG DATA_DIR
 ARG CONTAINER_USER
