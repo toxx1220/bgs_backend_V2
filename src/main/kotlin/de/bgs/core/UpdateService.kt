@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.concurrent.TimeUnit.DAYS
 
 @Component
 class UpdateService(
@@ -42,7 +41,7 @@ class UpdateService(
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val mutex = Mutex()
 
-    @Scheduled(timeUnit = DAYS, fixedRate = 7)
+    @Scheduled(cron = "0 0 3 * * 1")
     private suspend fun scheduledUpdateDatabase() {
         if (!schedulerEnabled || skipFirstExecution) {
             logger.info { "Scheduler is enabled: $schedulerEnabled, skip execution: $skipFirstExecution" }
