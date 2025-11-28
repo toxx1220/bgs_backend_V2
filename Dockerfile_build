@@ -7,7 +7,7 @@ COPY --chown=gradle:gradle . $GRADLE_DIR
 RUN gradle build --no-daemon --exclude-task test
 
 # Run Stage
-FROM eclipse-temurin:21-alpine
+FROM eclipse-temurin:21-jdk
 ARG GRADLE_DIR
 RUN addgroup --system spring && adduser --system --ingroup spring spring
 WORKDIR /app

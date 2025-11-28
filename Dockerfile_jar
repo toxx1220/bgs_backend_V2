@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk
 ARG HOME_DIR
 ARG DATA_DIR
 ARG CONTAINER_USER

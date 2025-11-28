@@ -21,7 +21,7 @@ in
         "--update-input"
         "nixpkgs"
       ];
-      dates = "10:00";
+      dates = "Mon *-*-* 00:00:00";
     };
     nix = {
     	settings.auto-optimise-store = true;
