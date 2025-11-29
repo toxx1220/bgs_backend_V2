@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.stream.consumeAsFlow
 import kotlinx.coroutines.sync.Mutex
 import org.eclipse.jgit.lib.Repository
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.Duration
@@ -51,6 +53,7 @@ class UpdateService(
         updateDatabase()
     }
 
+    @EventListener(ApplicationReadyEvent::class) // Run at startup
     fun triggerUpdateDatabase() {
         serviceScope.launch {
             updateDatabase()
