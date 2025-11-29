@@ -1,8 +1,12 @@
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:25-jdk
 ARG HOME_DIR
 ARG DATA_DIR
 ARG CONTAINER_USER
 ARG CONTAINER_GROUP
+# Install curl for healthcheck
+USER root
+RUN apt-get update && apt-get install -y curl
+
 RUN groupadd -r $CONTAINER_GROUP && \
     useradd -r -g $CONTAINER_GROUP -d $HOME_DIR -s /bin/false $CONTAINER_USER
 WORKDIR /bgs

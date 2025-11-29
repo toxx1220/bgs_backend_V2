@@ -11,7 +11,7 @@ class BoardGameSpecification(private val filterRequest: FilterRequest) : Specifi
 
     override fun toPredicate(
         root: Root<BoardGameItem>,
-        query: CriteriaQuery<*>?,
+        query: CriteriaQuery<*>,
         criteriaBuilder: CriteriaBuilder
     ): Predicate {
         val predicates = ArrayList<Predicate>()

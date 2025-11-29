@@ -7,8 +7,12 @@ COPY --chown=gradle:gradle . $GRADLE_DIR
 RUN gradle build --no-daemon --exclude-task test
 
 # Run Stage
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:25-jdk
 ARG GRADLE_DIR
+# Install curl for healthcheck
+USER root
+RUN apt-get update && apt-get install -y curl
+
 RUN addgroup --system spring && adduser --system --ingroup spring spring
 WORKDIR /app
 ## Add volume directory setup
