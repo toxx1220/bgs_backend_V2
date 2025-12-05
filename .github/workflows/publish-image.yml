@@ -11,6 +11,22 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
 
+      - name: Install SOPS
+        uses: mdgreenwald/mozilla-sops-action@v1.6.0
+
+      - name: Decrypt and load secrets
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_SECRET_KEY }}
+        run: |
+          CONTAINER_USER=$(sops -d --extract '["CONTAINER_USER"]' deployment/secrets/secrets.yaml)
+          CONTAINER_GROUP=$(sops -d --extract '["CONTAINER_GROUP"]' deployment/secrets/secrets.yaml)
+          DATA_DIR=$(sops -d --extract '["DATA_DIR"]' deployment/secrets/secrets.yaml)
+          HOME_DIR=$(sops -d --extract '["HOME_DIR"]' deployment/secrets/secrets.yaml)
+          echo "CONTAINER_USER=$CONTAINER_USER" >> $GITHUB_ENV
+          echo "CONTAINER_GROUP=$CONTAINER_GROUP" >> $GITHUB_ENV
+          echo "DATA_DIR=$DATA_DIR" >> $GITHUB_ENV
+          echo "HOME_DIR=$HOME_DIR" >> $GITHUB_ENV
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -22,6 +38,11 @@ jobs:
         with:
           context: ./deployment
           push: true
+          build-args: |
+            CONTAINER_USER=${{ env.CONTAINER_USER }}
+            CONTAINER_GROUP=${{ env.CONTAINER_GROUP }}
+            DATA_DIR=${{ env.DATA_DIR }}
+            HOME_DIR=${{ env.HOME_DIR }}
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/boardgamesearch:latest
             ${{ github.event_name == 'release' && format('{0}/boardgamesearch:{1}', secrets.DOCKERHUB_USERNAME, github.event.release.tag_name) || '' }}
