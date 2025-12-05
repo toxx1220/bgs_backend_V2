@@ -1,0 +1,7 @@
+keys:
+  - &local age1sur65t9wa9s0krds32kx9h379masmkyf663wwwav2ye0v5syyv2qkaxsd8
+creation_rules:
+  - path_regex: deployment/secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *local
