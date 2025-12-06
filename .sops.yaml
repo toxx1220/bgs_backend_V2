@@ -3,7 +3,7 @@ keys:
   - &vps age1h53k3c7ljgthsngt6s7jc90j5ddftek5k5w5xrxansjz338dd9fssx88qz
   - &github age1qfyv7s27lyehskzxlkasslvfvvral68sy974pkla3sj3mak7fs4sl4tquc
 creation_rules:
-  - path_regex: deployment/secrets/.*\.yaml$
+  - path_regex: deployment/.*\.yaml$
     key_groups:
       - age:
           - *local

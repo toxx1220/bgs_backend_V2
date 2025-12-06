@@ -66,6 +66,27 @@ in
      openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEdkWwiBoThxsipUqiK6hPXLn4KxI5GstfLJaE4nbjMO" ];
    };
 
+   sops = {
+    defaultSopsFile = ./secrets.yaml;
+    age.keyFile = "/home/${user}/.config/sops/age/keys.txt";
+    secrets = {
+        "docker-env" = { # Load secrets as .env file for docker
+            path = "/home/${user}/bgs/.env";
+            owner = user;
+            mode = "0600";
+        };
+        "docker-config" = {
+            path = "/home/${user}/.docker/config.json";
+            owner = user;
+            mode = "0600";
+        };
+    };
+   };
+   # ensure .docker directory exists with correct permissions
+   systemd.tmpfiles.rules = [
+     "d /home/${user}/.docker 0700 ${user} users -"
+   ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
    environment.systemPackages = with pkgs; [
@@ -73,6 +94,7 @@ in
      btop
      tree
      age
+     sops
    ];
 
    virtualisation.docker.enable = true;
