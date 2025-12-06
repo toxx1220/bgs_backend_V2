@@ -6,7 +6,7 @@ services:
     command: --cleanup -s "0 0 3 * * 2" # Weekly at 3am on Tuesdays
     restart: unless-stopped
   bgs-backend:
-    image: ${APP_NAME}:latest
+    image: toxx1220/boardgamesearch:latest
     container_name: ${APP_NAME}
     build:
       context: ./
