@@ -8,14 +8,6 @@ services:
   bgs-backend:
     image: toxx1220/boardgamesearch:latest
     container_name: ${APP_NAME}
-    build:
-      context: ./
-      dockerfile: Dockerfile
-      args:
-        HOME_DIR: ${HOME_DIR}
-        DATA_DIR: ${DATA_DIR}
-        CONTAINER_USER: ${CONTAINER_USER}
-        CONTAINER_GROUP: ${CONTAINER_GROUP}
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
