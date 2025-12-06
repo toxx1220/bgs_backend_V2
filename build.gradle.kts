@@ -2,14 +2,23 @@ plugins {
     kotlin("jvm") version "2.3.0-RC"
     kotlin("plugin.spring") version "2.3.0-RC"
     kotlin("plugin.jpa") version "2.3.0-RC"
+    kotlin("kapt") version "2.3.0-RC"
     id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
-    kotlin("kapt") version "2.3.0-RC"
     idea
+    id("net.nemerosa.versioning") version "3.1.0"
 }
 
+val baseVersion: String = versioning.info.tag?.removePrefix("v")
+    ?: "${versioning.info.branch}.${versioning.info.commit.take(7)}"
+
 group = "de"
-version = "0.0.1-SNAPSHOT"
+version = if (versioning.info.tag != null) {
+    baseVersion
+} else {
+    "$baseVersion-SNAPSHOT"
+}
+extra["appVersion"] = baseVersion
 
 java {
     toolchain {
@@ -84,6 +93,18 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+tasks.bootJar {
+    archiveBaseName.set("bgs")
+}
+
+springBoot {
+    buildInfo {
+        properties {
+            additional.set(mapOf("version" to (project.extra["appVersion"] as String)))
+        }
+    }
 }
 
 tasks.withType<Test> {
