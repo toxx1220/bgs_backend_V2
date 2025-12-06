@@ -9,3 +9,10 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    groups:
+      kotlin-plugins:
+        patterns:
+            - "org.jetbrains.kotlin:*"
+        update-types:
+          - "minor"
+          - "patch"
