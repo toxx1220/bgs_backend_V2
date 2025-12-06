@@ -27,10 +27,10 @@ jobs:
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_SECRET_KEY }}
         run: |
-          CONTAINER_USER=$(sops -d --extract '["docker-env"]["CONTAINER_USER"]' deployment/secrets.yaml)
-          CONTAINER_GROUP=$(sops -d --extract '["docker-env"]["CONTAINER_GROUP"]' deployment/secrets.yaml)
-          DATA_DIR=$(sops -d --extract '["docker-env"]["DATA_DIR"]' deployment/secrets.yaml)
-          HOME_DIR=$(sops -d --extract '["docker-env"]["HOME_DIR"]' deployment/secrets.yaml)
+          CONTAINER_USER=$(sops -d --extract '["gh_CONTAINER_USER"]' deployment/secrets.yaml)
+          CONTAINER_GROUP=$(sops -d --extract '["gh_CONTAINER_GROUP"]' deployment/secrets.yaml)
+          DATA_DIR=$(sops -d --extract '["gh_DATA_DIR"]' deployment/secrets.yaml)
+          HOME_DIR=$(sops -d --extract '["gh_HOME_DIR"]' deployment/secrets.yaml)
           echo "CONTAINER_USER=$CONTAINER_USER" >> $GITHUB_ENV
           echo "CONTAINER_GROUP=$CONTAINER_GROUP" >> $GITHUB_ENV
           echo "DATA_DIR=$DATA_DIR" >> $GITHUB_ENV
