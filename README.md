@@ -18,7 +18,7 @@ SPRING_DATASOURCE_USERNAME=${PG_USER}
 SPRING_DATASOURCE_PASSWORD=${PG_PASSWORD}
 ```
 
-How to run the App:
+How to run the App locally:
 1. execute Gradle bootJar from Plugin or `./gradlew bootJar`
 2. execute `docker compose up`
 
@@ -30,7 +30,7 @@ Connection to the Database outside of the Docker Container (using example env fi
 Connecting from inside the Docker, host needs to be swapped to `${PG_HOST}`
 
 TODO:
-- [ ] Use Secret Manager
+- [x] Use Secret Manager
 - [ ] Add Union Operators
-- [ ] Automate Deployments using watchtower or similar
+- [x] Automate Deployments using watchtower or similar -> On Release
 - [x] Add manual trigger for db job
