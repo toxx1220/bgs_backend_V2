@@ -3,6 +3,7 @@ services:
     image: containrrr/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/.docker/config.json:/config.json
     command: --cleanup -s "0 0 3 * * 2" # Weekly at 3am on Tuesdays
     restart: unless-stopped
   bgs-backend:
