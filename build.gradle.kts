@@ -71,8 +71,8 @@ dependencies {
 
     // Kapt dependencies
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-    kapt("org.hibernate.orm:hibernate-jpamodelgen:7.1.8.Final")
-    kaptTest("org.hibernate.orm:hibernate-jpamodelgen:7.1.8.Final")
+    kapt("org.hibernate.orm:hibernate-jpamodelgen:7.1.11.Final")
+    kaptTest("org.hibernate.orm:hibernate-jpamodelgen:7.1.11.Final")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
