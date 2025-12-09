@@ -18,9 +18,11 @@ services:
     environment:
       HOME: '${HOME_DIR}'
       DATA_DIR: '${DATA_DIR}'
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: '${PG_USER}'
       SPRING_DATASOURCE_PASSWORD: '${PG_PASSWORD}'
+      PG_HOST: ${PG_HOST}
+      PG_PORT: ${PG_PORT}
+      PG_DATABASE: ${PG_DATABASE}
       GIT_TOKEN: '${GIT_TOKEN}'
       BGG_API_KEY: '${BGG_API_KEY}'
     ports:
