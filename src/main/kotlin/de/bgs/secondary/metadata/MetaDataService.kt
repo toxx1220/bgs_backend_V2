@@ -6,6 +6,7 @@ import org.jsoup.Jsoup
 import org.springframework.http.client.ReactorClientHttpRequestFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
+import org.springframework.web.client.body
 import org.w3c.dom.Element
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
@@ -30,9 +31,10 @@ private const val XML_IMAGE_TAG = "image"
 private const val XML_DESCRIPTION_TAG = "description"
 
 @Service
-class MetaDataService {
+class MetaDataService(metaDataConfigurationProperties: MetaDataConfigurationProperties) {
 
     private val logger = KotlinLogging.logger { }
+    private val bggApiKey = metaDataConfigurationProperties.bggApiKey
 
     fun retrieveMetaData(boardGameItemList: List<BoardGameItem>): List<BoardGameItem> {
         val client = RestClient.builder()
@@ -44,11 +46,12 @@ class MetaDataService {
         val xmlResponseBody = client.get()
             .uri(URI("$BGG_URI/$boardGameIds"))
             .header("Accept-Encoding", "gzip")
+            .header("Authorization", "Bearer $bggApiKey")
             .retrieve()
             .onStatus({ status -> !status.is2xxSuccessful }) { _, response ->
                 logger.error { "Failed to retrieve image URIs from BGG API: ${response.statusCode} for $boardGameIds" }
             }
-            .body(String::class.java)
+            .body<String>()
 
         if (xmlResponseBody.isNullOrEmpty()) {
             logger.error { "Response Body from BGG API is null for $boardGameIds, for IDs: $boardGameIds" }
