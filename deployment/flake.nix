@@ -9,36 +9,31 @@
   };
 
   outputs = { self, nixpkgs, nixpkgs-stable, sops-nix, ... }:
-  let
-    system = "aarch64-linux";
+    let
+      system = "aarch64-linux";
 
-    pkgsConfig = {
-      allowUnfree = true;
-    };
+      pkgsConfig = { allowUnfree = true; };
 
-    pkgs = import nixpkgs {
-      inherit system;
-      config = pkgsConfig;
-    };
-
-    pkgs-stable = import nixpkgs-stable {
-      inherit system;
-      config = pkgsConfig;
-    };
-
-  in {
-    nixosConfigurations.nixos-vps = nixpkgs.lib.nixosSystem {
-      inherit system;
-
-      specialArgs = {
-        # Make stable packages available as pkgs-stable
-        inherit pkgs-stable;
+      pkgs = import nixpkgs {
+        inherit system;
+        config = pkgsConfig;
       };
 
-      modules = [
-        ./configuration.nix
-        sops-nix.nixosModules.sops
-      ];
+      pkgs-stable = import nixpkgs-stable {
+        inherit system;
+        config = pkgsConfig;
+      };
+
+    in {
+      nixosConfigurations.nixos-vps = nixpkgs.lib.nixosSystem {
+        inherit system;
+
+        specialArgs = {
+          # Make stable packages available as pkgs-stable
+          inherit pkgs-stable;
+        };
+
+        modules = [ ./configuration.nix sops-nix.nixosModules.sops ];
+      };
     };
-  };
 }
