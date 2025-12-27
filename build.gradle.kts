@@ -61,7 +61,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
-    implementation("io.projectreactor.netty:reactor-netty-http:1.3.0")
+    implementation("io.projectreactor.netty:reactor-netty-http:1.3.1")
     implementation("org.jsoup:jsoup:1.21.2")
 
 
