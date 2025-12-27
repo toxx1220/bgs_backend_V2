@@ -45,6 +45,7 @@ class GitService(gitProperties: GitConfigurationProperties) {
 
     fun cloneGitRepository(): Optional<Repository> {
 
+        // TODO: Use command line git with --filter=blob:none, as JGit apparently doesn't support this
         try {
             Git.cloneRepository()
                 .setURI(repoUrl)
