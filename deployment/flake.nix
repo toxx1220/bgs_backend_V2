@@ -12,18 +12,15 @@
   let
     system = "aarch64-linux";
 
-    # Configuration for both package sets
     pkgsConfig = {
       allowUnfree = true;
     };
 
-    # Unstable packages (default)
     pkgs = import nixpkgs {
       inherit system;
       config = pkgsConfig;
     };
 
-    # Stable packages
     pkgs-stable = import nixpkgs-stable {
       inherit system;
       config = pkgsConfig;
@@ -39,7 +36,6 @@
       };
 
       modules = [
-        # The main configuration file
         ./configuration.nix
         sops-nix.nixosModules.sops
       ];
