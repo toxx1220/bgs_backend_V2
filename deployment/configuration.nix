@@ -25,11 +25,14 @@ in
     };
     nix = {
     	settings.auto-optimise-store = true;
-    	gc = {
-    	  automatic = true;
-    	  dates = "weekly";
-    	  options = "--delete-older-than 8d";
-       };
+    };
+
+    programs.nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep-since 8d --keep 3";
+      clean.dates = "weekly";
+      flake = "/etc/nixos";
     };
 
   # Use the systemd-boot EFI boot loader.
@@ -90,7 +93,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
    environment.systemPackages = with pkgs; [
-     micro # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+     micro
      btop
      tree
      age
