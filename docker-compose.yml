@@ -12,19 +12,19 @@ services:
         CONTAINER_GROUP: ${CONTAINER_GROUP}
     restart: always
     environment:
-      HOME: '${HOME_DIR}'
-      DATA_DIR: '${DATA_DIR}'
-      SPRING_DATASOURCE_USERNAME: '${PG_USER}'
-      SPRING_DATASOURCE_PASSWORD: '${PG_PASSWORD}'
+      HOME: "${HOME_DIR}"
+      DATA_DIR: "${DATA_DIR}"
+      SPRING_DATASOURCE_USERNAME: "${PG_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${PG_PASSWORD}"
       PG_HOST: ${PG_HOST}
       PG_PORT: ${PG_PORT}
       PG_DATABASE: ${PG_DATABASE}
-      GIT_TOKEN: '${GIT_TOKEN}'
-      BGG_API_KEY: '${BGG_API_KEY}'
+      GIT_TOKEN: "${GIT_TOKEN}"
+      BGG_API_KEY: "${BGG_API_KEY}"
     expose:
-      - '${APP_PORT}'
+      - "${APP_PORT}"
     ports:
-      - '${APP_PORT}:${APP_PORT}'
+      - "${APP_PORT}:${APP_PORT}"
     networks:
       - tasks-network
     volumes:
@@ -37,17 +37,21 @@ services:
     image: postgres:latest
     container_name: ${PG_HOST}
     environment:
-      POSTGRES_DB: '${PG_DATABASE}'
-      POSTGRES_USER: '${PG_USER}'
-      POSTGRES_PASSWORD: '${PG_PASSWORD}'
+      POSTGRES_DB: "${PG_DATABASE}"
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD}"
     networks:
       - tasks-network
     volumes:
       - db-data:/data/db
     ports:
-      - '${PG_PORT}:${PG_PORT}'
+      - "${PG_PORT}:${PG_PORT}"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0" ]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0",
+        ]
       interval: 5s
       timeout: 10s
       retries: 5

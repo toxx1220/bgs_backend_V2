@@ -16,17 +16,17 @@ services:
       - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
     environment:
-      HOME: '${HOME_DIR}'
-      DATA_DIR: '${DATA_DIR}'
-      SPRING_DATASOURCE_USERNAME: '${PG_USER}'
-      SPRING_DATASOURCE_PASSWORD: '${PG_PASSWORD}'
+      HOME: "${HOME_DIR}"
+      DATA_DIR: "${DATA_DIR}"
+      SPRING_DATASOURCE_USERNAME: "${PG_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${PG_PASSWORD}"
       PG_HOST: ${PG_HOST}
       PG_PORT: ${PG_PORT}
       PG_DATABASE: ${PG_DATABASE}
-      GIT_TOKEN: '${GIT_TOKEN}'
-      BGG_API_KEY: '${BGG_API_KEY}'
+      GIT_TOKEN: "${GIT_TOKEN}"
+      BGG_API_KEY: "${BGG_API_KEY}"
     ports:
-      - '${APP_PORT}'
+      - "${APP_PORT}"
     volumes:
       - app-data:${DATA_DIR}
     networks:
@@ -37,10 +37,16 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 3500M
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:${APP_PORT}/actuator/health/liveness" ]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:${APP_PORT}/actuator/health/liveness",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -50,17 +56,21 @@ services:
     container_name: ${PG_HOST}
     restart: unless-stopped
     environment:
-      POSTGRES_DB: '${PG_DATABASE}'
-      POSTGRES_USER: '${PG_USER}'
-      POSTGRES_PASSWORD: '${PG_PASSWORD}'
+      POSTGRES_DB: "${PG_DATABASE}"
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD}"
     networks:
       - tasks-network
     volumes:
       - db-data:/var/lib/postgres/data
     ports:
-      - '${PG_PORT}'
+      - "${PG_PORT}"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0" ]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready --username=${PG_USER} --dbname=${PG_DATABASE} --port=${PG_PORT} -t 0",
+        ]
       interval: 5s
       timeout: 10s
       retries: 5
@@ -94,7 +104,14 @@ services:
     networks:
       - tasks-network
     healthcheck:
-      test: ["CMD", "traefik", "healthcheck", "--ping=true", "--ping.entryPoint=traefik"]
+      test:
+        [
+          "CMD",
+          "traefik",
+          "healthcheck",
+          "--ping=true",
+          "--ping.entryPoint=traefik",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3

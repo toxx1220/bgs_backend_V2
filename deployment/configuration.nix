@@ -1,9 +1,16 @@
-{ config, lib, pkgs, pkgs-stable, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  pkgs-stable,
+  ...
+}:
 let
   user = "toxx";
   sshPort = 6969;
   hostName = "nixos-vps";
-in {
+in
+{
   imports = [ ./hardware-configuration.nix ];
 
   boot.binfmt.emulatedSystems = [
@@ -13,10 +20,15 @@ in {
   system.autoUpgrade = {
     enable = true;
     flake = "/etc/nixos";
-    flags = [ "--update-input" "nixpkgs" ];
+    flags = [
+      "--update-input"
+      "nixpkgs"
+    ];
     dates = "Mon *-*-* 00:00:00";
   };
-  nix = { settings.auto-optimise-store = true; };
+  nix = {
+    settings.auto-optimise-store = true;
+  };
 
   programs.nh = {
     enable = true;
@@ -30,18 +42,24 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   networking.hostName = hostName;
-  networking.networkmanager.enable =
-    true; # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   time.timeZone = "Europe/Berlin";
 
   # Define a user account. Don't forget to set a password with ‘passwd’. # TODO: supply via sops?
   users.users.${user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "sudo" "docker" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "wheel"
+      "sudo"
+      "docker"
+    ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [ ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEdkWwiBoThxsipUqiK6hPXLn4KxI5GstfLJaE4nbjMO"
@@ -52,7 +70,8 @@ in {
     defaultSopsFile = ./secrets.yaml;
     age.keyFile = "/home/${user}/.config/sops/age/keys.txt";
     secrets = {
-      "docker-env" = { # Load secrets as .env file for docker
+      "docker-env" = {
+        # Load secrets as .env file for docker
         path = "/home/${user}/bgs/.env";
         owner = user;
         mode = "0600";
@@ -67,7 +86,13 @@ in {
   # ensure .docker directory exists with correct permissions
   systemd.tmpfiles.rules = [ "d /home/${user}/.docker 0700 ${user} users -" ];
 
-  environment.systemPackages = with pkgs; [ micro btop tree age sops ];
+  environment.systemPackages = with pkgs; [
+    micro
+    btop
+    tree
+    age
+    sops
+  ];
 
   virtualisation.docker.enable = true;
 
@@ -99,7 +124,11 @@ in {
       	'';
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 443 sshPort ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+    sshPort
+  ];
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
