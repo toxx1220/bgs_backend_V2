@@ -43,6 +43,7 @@ out/
 ### Custom ###
 .env
 /data/
+*.sql
 
 ### MacOS ###
 .DS_Store
