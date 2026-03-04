@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "2.3.0-RC2"
-    kotlin("plugin.spring") version "2.3.0-RC2"
-    kotlin("plugin.jpa") version "2.3.0-RC2"
-    kotlin("kapt") version "2.3.0-RC2"
+    kotlin("jvm") version "2.3.10"
+    kotlin("plugin.spring") version "2.3.10"
+    kotlin("plugin.jpa") version "2.3.10"
+    kotlin("kapt") version "2.3.10"
     id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
     idea
@@ -20,15 +20,17 @@ val projectVersion: String by project
 val javaVersion: String by project
 val projectGroup: String by project
 
-val baseVersion: String = versioning.info.tag?.removePrefix("v")
-    ?: "${versioning.info.branch}.${versioning.info.commit.take(7)}"
+val baseVersion: String =
+    versioning.info.tag?.removePrefix("v")
+        ?: "${versioning.info.branch}.${versioning.info.commit.take(7)}"
 
 group = projectGroup
-version = if (versioning.info.tag != null) {
-    baseVersion
-} else {
-    "$baseVersion-SNAPSHOT"
-}
+version =
+    if (versioning.info.tag != null) {
+        baseVersion
+    } else {
+        "$baseVersion-SNAPSHOT"
+    }
 extra["appVersion"] = baseVersion
 
 java {
@@ -49,7 +51,6 @@ sourceSets {
         }
     }
 }
-
 
 repositories {
     mavenCentral()
@@ -72,9 +73,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
-    implementation("io.projectreactor.netty:reactor-netty-http:1.3.0")
+    implementation("io.projectreactor.netty:reactor-netty-http:1.3.3")
     implementation("org.jsoup:jsoup:1.21.2")
-
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
