@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.3.0-RC2"
+    kotlin("jvm") version "2.3.20-RC2"
     kotlin("plugin.spring") version "2.3.0-RC2"
     kotlin("plugin.jpa") version "2.3.0-RC2"
     kotlin("kapt") version "2.3.0-RC2"
