@@ -66,15 +66,15 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
     implementation("org.eclipse.jgit:org.eclipse.jgit:7.4.0.202509020913-r")
-    implementation("io.github.oshai:kotlin-logging-jvm:7.0.13")
+    implementation("io.github.oshai:kotlin-logging-jvm:8.0.01")
     implementation("org.apache.commons:commons-csv:1.14.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
     implementation("io.projectreactor.netty:reactor-netty-http:1.3.3")
-    implementation("org.jsoup:jsoup:1.21.2")
+    implementation("org.jsoup:jsoup:1.22.1")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
@@ -82,8 +82,8 @@ dependencies {
 
     // Kapt dependencies
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-    kapt("org.hibernate.orm:hibernate-jpamodelgen:7.1.11.Final")
-    kaptTest("org.hibernate.orm:hibernate-jpamodelgen:7.1.11.Final")
+    kapt("org.hibernate.orm:hibernate-jpamodelgen:7.2.6.Final")
+    kaptTest("org.hibernate.orm:hibernate-jpamodelgen:7.2.6.Final")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
