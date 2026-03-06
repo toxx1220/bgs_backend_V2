@@ -3,5 +3,5 @@
 {
   version = "v0.2.5";
   url = "https://github.com/toxx1220/bgs_backend_V2/releases/download/v0.2.5/bgs.jar";
-  hash = "sha256-jBWY9EGgM95T3+kh87yVJG7TXRhCzEby4S55QhopQTE=";
+  hash = "sha256-5FJ15TR4uXbWJifynsfx4SzVQbXyMlFD7OTaNjmnRXo=";
 }
