@@ -26,7 +26,8 @@ private const val XML_BOARDGAME_TAG = "boardgame"
 
 private const val XML_OBJECT_ID_TAG = "objectid"
 
-private const val XML_IMAGE_TAG = "image"
+// API serves Image and Thumbnail (the latter being smaller)
+private const val XML_THUMBNAIL_TAG = "thumbnail"
 
 private const val XML_DESCRIPTION_TAG = "description"
 
@@ -58,7 +59,6 @@ class MetaDataService(metaDataConfigurationProperties: MetaDataConfigurationProp
             return boardGameItemList
         }
 
-
         val imageUris: Map<Long, Tuple<String?, String?>> = parseImageUriFrom(xmlResponseBody)
         return boardGameItemList.map {
             it.imageUri = imageUris[it.bggId]?._1()
@@ -84,7 +84,7 @@ class MetaDataService(metaDataConfigurationProperties: MetaDataConfigurationProp
             for (i in 0 until nodeList.length) {
                 val node = nodeList.item(i) as Element
                 val objectId = node.getAttribute(XML_OBJECT_ID_TAG).toLongOrNull() ?: continue
-                val imageUriItem = node.getElementsByTagName(XML_IMAGE_TAG)
+                val imageUriItem = node.getElementsByTagName(XML_THUMBNAIL_TAG)
                     .item(0)?.textContent?.trim()?.let { Jsoup.parse(it).text() }
                 val description = node.getElementsByTagName(XML_DESCRIPTION_TAG)
                     .item(0)?.textContent?.trim()?.let { Jsoup.parse(it).text() }
