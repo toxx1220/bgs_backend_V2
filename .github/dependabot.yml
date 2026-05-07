@@ -16,3 +16,10 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      spring-boot:
+        patterns:
+          - "org.springframework.boot:*"
+          - "io.spring.dependency-management"
+        update-types:
+          - "minor"
+          - "patch"

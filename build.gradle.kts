@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.spring") version "2.3.10"
     kotlin("plugin.jpa") version "2.3.10"
     kotlin("kapt") version "2.3.10"
-    id("org.springframework.boot") version "4.0.3"
+    id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
     idea
     id("net.nemerosa.versioning") version "3.1.0"
@@ -73,7 +73,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
-    implementation("io.projectreactor.netty:reactor-netty-http:1.3.4")
+    implementation("io.projectreactor.netty:reactor-netty-http:1.3.5")
     implementation("org.jsoup:jsoup:1.22.1")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
