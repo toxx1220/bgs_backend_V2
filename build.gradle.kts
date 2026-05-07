@@ -67,7 +67,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
-    implementation("org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:7.6.0.202603022253-r")
     implementation("io.github.oshai:kotlin-logging-jvm:8.0.01")
     implementation("org.apache.commons:commons-csv:1.14.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
