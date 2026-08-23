@@ -1,3 +1,5 @@
+Note: Docker Deployment is deprecated!
+
 # Application Deployment Notes
 Using sops for secrets management. Make sure to supply the right env vars for docker compose.
 
