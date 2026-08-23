@@ -1,7 +1,7 @@
 # Auto-updated by GitHub Actions on each tagged release.
 # To update manually, run: nix run .#update-jar -- <tag>
 {
-  version = "v0.2.7";
-  url = "https://github.com/toxx1220/bgs_backend_V2/releases/download/v0.2.7/bgs.jar";
-  hash = "sha256-tswY8RHBeXH+za7CUuHgUsuzUEIz9VWnG0UWpqgTL4U=";
+  version = "v0.3.0";
+  url = "https://github.com/toxx1220/bgs_backend_V2/releases/download/v0.3.0/bgs.jar";
+  hash = "sha256-O7x73Iw7dRWZqwRcSIZ3+FAAlNjFLAhFKr1AL3deeS4=";
 }
