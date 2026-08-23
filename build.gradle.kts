@@ -6,7 +6,7 @@ plugins {
     id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
     idea
-    id("net.nemerosa.versioning") version "3.1.0"
+    id("net.nemerosa.versioning") version "4.0.1"
 }
 
 idea {
@@ -67,8 +67,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
-    implementation("org.eclipse.jgit:org.eclipse.jgit:7.6.0.202603022253-r")
-    implementation("io.github.oshai:kotlin-logging-jvm:8.0.02")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:7.7.1.202607240634-r")
+    implementation("io.github.oshai:kotlin-logging-jvm:8.0.4")
     implementation("org.apache.commons:commons-csv:1.14.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.10.2")
@@ -82,14 +82,14 @@ dependencies {
 
     // Kapt dependencies
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-    kapt("org.hibernate.orm:hibernate-jpamodelgen:7.3.0.Final")
-    kaptTest("org.hibernate.orm:hibernate-jpamodelgen:7.3.0.Final")
+    kapt("org.hibernate.orm:hibernate-processor:7.4.6.Final")
+    kaptTest("org.hibernate.orm:hibernate-processor:7.4.6.Final")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:testcontainers")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers-postgresql")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
