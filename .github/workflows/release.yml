@@ -86,14 +86,6 @@ jobs:
           fi
           echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Wait for Garnix check
-        uses: lewagon/wait-on-check-action@v1.5.0
-        with:
-          ref: ${{ steps.push.outputs.commit_sha }}
-          check-regexp: "(packages|Evaluate|All Garnix).*"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10 # seconds
-
       - name: Promote to Final Release
         if: success()
         env:
