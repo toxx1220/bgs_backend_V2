@@ -20,9 +20,9 @@ in
       description = "The bgs-backend package to use.";
     };
 
-    envFile = lib.mkOption {
-      type = lib.types.str;
-      description = "Path to a file containing environment variables (e.g., database credentials)";
+    envFiles = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = "Paths to files containing environment variables (e.g., database credentials)";
     };
   };
 
@@ -48,7 +48,7 @@ in
         User = user;
         Group = user;
         WorkingDirectory = "/var/lib/bgs-backend";
-        EnvironmentFile = cfg.envFile;
+        EnvironmentFile = cfg.envFiles;
         ExecStart = "${cfg.package}/bin/bgs";
 
         Restart = "always";
