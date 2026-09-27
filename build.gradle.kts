@@ -71,9 +71,6 @@ dependencies {
     implementation(libs.kotlin.logging)
     implementation(libs.commons.csv)
     implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.reactor)
-    implementation(libs.kotlinx.coroutines.core.jvm)
-    implementation(libs.reactor.netty.http)
     implementation(libs.jsoup)
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")

@@ -8,7 +8,6 @@ jgit = "7.7.1.202607240634-r"
 kotlin-logging = "8.0.4"
 commons-csv = "1.14.1"
 kotlinx-coroutines = "1.11.0"
-reactor-netty = "1.3.7"
 jsoup = "1.23.1"
 hibernate = "7.4.6.Final"
 
@@ -18,9 +17,6 @@ jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines" }
-reactor-netty-http = { module = "io.projectreactor.netty:reactor-netty-http", version.ref = "reactor-netty" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 hibernate-processor = { module = "org.hibernate.orm:hibernate-processor", version.ref = "hibernate" }
 
