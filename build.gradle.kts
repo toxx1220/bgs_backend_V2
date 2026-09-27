@@ -1,12 +1,12 @@
 plugins {
-    kotlin("jvm") version "2.3.21"
-    kotlin("plugin.spring") version "2.3.10"
-    kotlin("plugin.jpa") version "2.3.21"
-    kotlin("kapt") version "2.4.10"
-    id("org.springframework.boot") version "4.0.6"
-    id("io.spring.dependency-management") version "1.1.7"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.plugin.spring)
+    alias(libs.plugins.kotlin.plugin.jpa)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
     idea
-    id("net.nemerosa.versioning") version "4.0.1"
+    alias(libs.plugins.nemerosa.versioning)
 }
 
 idea {
@@ -66,15 +66,15 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
-    implementation("org.eclipse.jgit:org.eclipse.jgit:7.7.1.202607240634-r")
-    implementation("io.github.oshai:kotlin-logging-jvm:8.0.4")
-    implementation("org.apache.commons:commons-csv:1.14.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.11.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0")
-    implementation("io.projectreactor.netty:reactor-netty-http:1.3.5")
-    implementation("org.jsoup:jsoup:1.22.2")
+    implementation(libs.springdoc)
+    implementation(libs.jgit)
+    implementation(libs.kotlin.logging)
+    implementation(libs.commons.csv)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.reactor)
+    implementation(libs.kotlinx.coroutines.core.jvm)
+    implementation(libs.reactor.netty.http)
+    implementation(libs.jsoup)
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
@@ -82,8 +82,8 @@ dependencies {
 
     // Kapt dependencies
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-    kapt("org.hibernate.orm:hibernate-processor:7.4.6.Final")
-    kaptTest("org.hibernate.orm:hibernate-processor:7.4.6.Final")
+    kapt(libs.hibernate.processor)
+    kaptTest(libs.hibernate.processor)
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")

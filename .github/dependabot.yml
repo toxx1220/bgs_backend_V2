@@ -12,13 +12,13 @@ updates:
     groups:
       kotlin-plugins:
         patterns:
-          - "org.jetbrains.kotlin:*"
+          - "org.jetbrains.kotlin.*"
         update-types:
           - "minor"
           - "patch"
       spring-boot:
         patterns:
-          - "org.springframework.boot:*"
+          - "org.springframework.boot"
           - "io.spring.dependency-management"
         update-types:
           - "minor"
