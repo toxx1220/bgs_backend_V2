@@ -8,4 +8,9 @@ Currently hosted at [bgsearch.toxx.dev](https://bgsearch.toxx.dev/swagger-ui/ind
 
 ### Deployment
 This App is deployed as a [Nix Module](https://nixos.wiki/wiki/NixOS_modules). 
-Deploying is as easy as tagging and pushing a commit. A git action triggers a merge request into my [NixOS VPS](https://github.com/toxx1220/nix-vps), which auto deploys it.
+Deploying requires tagging and pushing a commit
+```bash
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
+A git action triggers a merge request into my [NixOS VPS](https://github.com/toxx1220/nix-vps), which auto deploys it.
