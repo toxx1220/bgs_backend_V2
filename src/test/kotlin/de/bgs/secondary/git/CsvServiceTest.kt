@@ -1,6 +1,7 @@
 package de.bgs.secondary.git
 
 import de.bgs.PostgresqlContainerBaseTest
+import de.bgs.secondary.BoardGameJpaRepo
 import de.bgs.secondary.GameFamilyJpaRepo
 import de.bgs.secondary.database.BoardGameItem
 import de.bgs.secondary.database.GameFamily
@@ -18,6 +19,9 @@ import java.io.File
     ]
 )
 class CsvServiceTest : PostgresqlContainerBaseTest() {
+
+    @Autowired
+    private lateinit var boardGameJpaRepo: BoardGameJpaRepo
 
     @Autowired
     private lateinit var gameFamilyRepo: GameFamilyJpaRepo
@@ -43,7 +47,7 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
     }
 
     @Test
-    fun parseGameItem() {
+    suspend fun parseGameItem() {
         val gameFamilies = listOf(
             GameFamily(null, 66553, "Components: Control Boards"),
             GameFamily(null, 64990, "Components: Meeples (Animal) / Animeeples"),
@@ -51,15 +55,18 @@ class CsvServiceTest : PostgresqlContainerBaseTest() {
         )
         val expectedGameFamilies = gameFamilyRepo.saveAll(gameFamilies).associateBy { it.bggId }
 
-        val boardGames = csvService.parseBoardGamesStream(
+        val boardGames = mutableListOf<BoardGameItem>()
+        csvService.parseBoardGames(
             repoRoot,
-            expectedGameFamilies,
-            emptyMap(),
-            emptyMap(),
-            emptyMap(),
-            emptyMap(),
-            emptyMap()
-        )
+            BoardGameItemEntityRelations(
+                expectedGameFamilies,
+                emptyMap(),
+                emptyMap(),
+                emptyMap(),
+                emptyMap(),
+                emptyMap()
+            )
+        ).collect { boardGames.add(it) }
 
         assertThat(boardGames).containsExactly(
             BoardGameItem(

@@ -1,17 +1,30 @@
 package de.bgs.core
 
-import de.bgs.secondary.*
+import de.bgs.secondary.BoardGameJpaRepo
+import de.bgs.secondary.CategoryJpaRepo
+import de.bgs.secondary.GameFamilyJpaRepo
+import de.bgs.secondary.GameTypeJpaRepo
+import de.bgs.secondary.MechanicJpaRepo
+import de.bgs.secondary.PersonJpaRepo
+import de.bgs.secondary.PublisherJpaRepo
+import de.bgs.secondary.UpdateTaskInformationRepo
 import de.bgs.secondary.database.GameFamily
 import de.bgs.secondary.database.UpdateTaskInformation
+import de.bgs.secondary.git.BoardGameItemEntityRelations
 import de.bgs.secondary.git.CsvService
 import de.bgs.secondary.git.GitConfigurationProperties
 import de.bgs.secondary.git.GitService
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.stream.consumeAsFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.chunked
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 import org.eclipse.jgit.lib.Repository
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
@@ -100,27 +113,23 @@ class UpdateService(
                 publisherJpaRepo.saveAll(csvService.parsePublisher(repo.workTree)).associateBy { it.bggId }
             logger.info { "Successfully saved ${publisherMap.size} Publisher" }
 
-            var totalCounter = 0
-            csvService.parseBoardGamesStream(
+            csvService.parseBoardGames(
                 repo.workTree,
-                gameFamilyMap,
-                gameTypeMap,
-                personMap,
-                categoryMap,
-                mechanicMap,
-                publisherMap
-            ).consumeAsFlow()
-                .buffer(capacity = 16, onBufferOverflow = BufferOverflow.SUSPEND)
-                .flowOn(Dispatchers.IO)
+                BoardGameItemEntityRelations(
+                    gameFamilyMap,
+                    gameTypeMap,
+                    personMap,
+                    categoryMap,
+                    mechanicMap,
+                    publisherMap
+                )
+            ).flowOn(Dispatchers.IO)
                 .chunked(500)
-                .onEach { items ->
-                    boardGameJpaRepo.saveAll(items)
-                    totalCounter += items.size
-                    logger.info { "Executed Batch of size ${items.size}. # items saved: $totalCounter" }
-                    System.gc()
+                .fold(0) { saved, batch ->
+                    boardGameJpaRepo.saveAll(batch)
+                    logger.info { "Executed Batch of size ${batch.size}. # items saved: $saved" }
+                    saved + batch.size
                 }
-                .catch { e -> logger.error(e) { "Pipeline failed $e" } }
-                .collect()
             val duration = Duration.between(updateStartTime, LocalDateTime.now(utcZone))
             val info = UpdateTaskInformation(
                 lastUpdateTaskTime = updateStartTime,
