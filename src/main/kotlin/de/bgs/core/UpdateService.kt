@@ -57,13 +57,15 @@ class UpdateService(
     private val mutex = Mutex()
 
     @Scheduled(cron = "0 0 3 * * 1")
-    private suspend fun scheduledUpdateDatabase() {
+    private fun scheduledUpdateDatabase() {
         if (!schedulerEnabled || skipFirstExecution) {
             logger.info { "Scheduler is enabled: $schedulerEnabled, skip execution: $skipFirstExecution" }
             skipFirstExecution = false
             return
         }
-        updateDatabase()
+        serviceScope.launch {
+            updateDatabase()
+        }
     }
 
     @EventListener(ApplicationReadyEvent::class) // Run at startup
