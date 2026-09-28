@@ -9,7 +9,7 @@ kotlin-logging = "8.0.4"
 commons-csv = "1.14.1"
 kotlinx-coroutines = "1.11.0"
 jsoup = "1.23.1"
-hibernate = "7.4.6.Final"
+hibernate = "7.4.10.Final"
 
 [libraries]
 springdoc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
