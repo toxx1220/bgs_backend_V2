@@ -8,7 +8,7 @@ jgit = "7.8.0.202609011348-r"
 kotlin-logging = "8.0.4"
 commons-csv = "1.14.1"
 kotlinx-coroutines = "1.11.0"
-jsoup = "1.23.1"
+jsoup = "1.23.2"
 hibernate = "7.4.10.Final"
 
 [libraries]
