@@ -3,7 +3,6 @@ package de.bgs.secondary.metadata
 import de.bgs.secondary.database.BoardGameItem
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jsoup.Jsoup
-import org.springframework.http.client.ReactorClientHttpRequestFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
@@ -38,9 +37,7 @@ class MetaDataService(metaDataConfigurationProperties: MetaDataConfigurationProp
     private val bggApiKey = metaDataConfigurationProperties.bggApiKey
 
     fun retrieveMetaData(boardGameItemList: List<BoardGameItem>): List<BoardGameItem> {
-        val client = RestClient.builder()
-            .requestFactory(ReactorClientHttpRequestFactory())
-            .build()
+        val client = RestClient.create()
 
         val boardGameIds = boardGameItemList.joinToString(",") { it.bggId.toString() }
 
